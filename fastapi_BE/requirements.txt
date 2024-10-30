@@ -4,9 +4,14 @@ sqlmodel==0.0.22
 pydantic==2.9.2
 pydantic-settings==2.6.0
 psycopg2-binary==2.9.10
+psycopg-binary==3.2.3
 psycopg==3.2.3
 crewai==0.55.0
 crewai-tools==0.12.0
 langchain==0.2.16
 # langchain-groq==0.1.10
 langchain-openai==0.1.25
+python-multipart==0.0.16
+python-dotenv==1.0.1
+crewai[tools]==4.0.0
+PyPDF2==3.0.1
