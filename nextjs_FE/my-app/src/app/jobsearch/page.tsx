@@ -12,7 +12,6 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/utils/cn";
 
 // Define the Link interface
 interface Link {

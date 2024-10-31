@@ -3,11 +3,9 @@
 
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { SparklesCore } from "../components/ui/sparkles"; // Adjust the import path if necessary
 
 export const Navbar = () => {
-  const pathname = usePathname();
   
   return (
     <nav className="fixed top-0 w-full z-50 px-4 py-3 backdrop-blur-sm">
