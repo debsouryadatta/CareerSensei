@@ -5,8 +5,11 @@ pydantic==2.9.2
 pydantic-settings==2.6.0
 psycopg2-binary==2.9.10
 psycopg==3.2.3
-crewai==0.55.0
-crewai-tools==0.12.0
-langchain==0.2.16
-# langchain-groq==0.1.10
-langchain-openai==0.1.25
+python-multipart==0.0.16
+python-dotenv==1.0.1
+PyPDF2==3.0.1
+
+langchain==0.3.6
+langchain-openai==0.2.4
+langchain-community==0.3.4
+langchain-core==0.3.14
