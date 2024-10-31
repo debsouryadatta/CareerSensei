@@ -20,7 +20,7 @@ export default function SignIn() {
       // Add your authentication logic here
       
       // After successful authentication, redirect to JobSearch page
-      router.push('/jobsearch'); // Assuming '/jobsearch' is the route where JobSearch component is rendered
+      router.push('/jobsearch'); 
     } catch (error) {
       console.error('Authentication error:', error);
       // Handle error appropriately
@@ -32,17 +32,18 @@ export default function SignIn() {
 
   return (
     <BackgroundBeams>
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-4xl" // Changed from max-w-md to max-w-4xl for more width
-      >
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
+    <div className="w-full max-w-md  flex flex-col items-center justify-center px-4">
+    <h2 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
             Welcome Back
           </h2>
           
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-4xl"
+      >
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8">
+        
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-2">

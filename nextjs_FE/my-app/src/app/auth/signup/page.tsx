@@ -20,16 +20,17 @@ export default function SignUp() {
 
   return (
     <BackgroundBeams>
-    <div className="min-h-screen flex items-center justify-center  px-4">
+    <div className="w-full max-w-md flex flex-col items-center justify-center  px-4">
+    <h2 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
+            Create Account
+          </h2>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-4xl"
       >
         <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
-            Create Account
-          </h2>
+         
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
