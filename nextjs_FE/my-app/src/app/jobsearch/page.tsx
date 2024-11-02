@@ -1,8 +1,7 @@
-// // app/page.tsx
-
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
+import { FileUpload } from "../../components/ui/file-upload";
 import {
   IconArrowLeft,
   IconBrandTabler,
@@ -13,7 +12,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-// Define the Link interface
 interface Link {
   label: string;
   href: string;
@@ -21,6 +19,12 @@ interface Link {
 }
 
 export default function JobSearch() {
+  const [files, setFiles] = useState<File[]>([]);
+  const handleFileUpload = (files: File[]) => {
+    setFiles(files);
+    console.log(files);
+  };
+
   const links: Link[] = [
     {
       label: "Dashboard",
@@ -88,99 +92,51 @@ export default function JobSearch() {
       </Sidebar>
 
       <div className="flex-1 p-8 bg-gray-100 dark:bg-neutral-800">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-          Find Jobs
-        </h1>
-        <div className="flex gap-4 mb-6">
-          <button
-            className={`px-4 py-2 rounded-tl-lg rounded-tr-lg ${
-              tab === "resume"
-                ? "bg-indigo-500 text-white"
-                : "bg-white dark:bg-neutral-700"
-            }`}
-            onClick={() => setTab("resume")}
-          >
-            by resume
-          </button>
-          <button
-            className={`px-4 py-2 rounded-tl-lg rounded-tr-lg ${
-              tab === "filter"
-                ? "bg-indigo-500 text-white"
-                : "bg-white dark:bg-neutral-700"
-            }`}
-            onClick={() => setTab("filter")}
-          >
-            by filtering
-          </button>
-        </div>
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+            Find Jobs
+          </h1>
+          <div className="flex justify-center gap-4 mb-6">
+            <button
+              className={`px-6 py-2 rounded-lg ${
+                tab === "resume"
+                  ? "bg-indigo-500 text-white"
+                  : "bg-white dark:bg-neutral-700"
+              }`}
+              onClick={() => setTab("resume")}
+            >
+              by resume
+            </button>
+            <button
+              className={`px-6 py-2 rounded-lg ${
+                tab === "filter"
+                  ? "bg-indigo-500 text-white"
+                  : "bg-white dark:bg-neutral-700"
+              }`}
+              onClick={() => setTab("filter")}
+            >
+              by filtering
+            </button>
+          </div>
 
-        {tab === "resume" ? <UploadResume /> : <FilterForm />}
+          {tab === "resume" ? (
+            <UploadResume onFileUpload={handleFileUpload} />
+          ) : (
+            <FilterForm />
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-// const UploadResume = () => {
-//   return (
-//     <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-md">
-//       <div className="border-dashed border-2 border-gray-300 dark:border-neutral-500 rounded-lg p-6 flex justify-center items-center h-40">
-//         <span className="text-gray-600 dark:text-gray-300">
-//           Upload your resume
-//         </span>
-//       </div>
-//       <button className="mt-4 bg-indigo-500 text-white px-6 py-2 rounded-lg">
-//         Search job
-//       </button>
-//     </div>
-//   );
-// };
-
-// const FilterForm = () => {
-//   return (
-//     <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-md">
-//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//         <input
-//           type="text"
-//           placeholder="Profile"
-//           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md"
-//         />
-//         <input
-//           type="text"
-//           placeholder="Location"
-//           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md"
-//         />
-//         <input
-//           type="text"
-//           placeholder="Experience"
-//           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md"
-//         />
-//         <input
-//           type="text"
-//           placeholder="Company"
-//           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md"
-//         />
-//         <input
-//           type="text"
-//           placeholder="Technologies"
-//           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md col-span-1 sm:col-span-2"
-//         />
-//       </div>
-//       <button className="mt-4 bg-indigo-500 text-white px-6 py-2 rounded-lg">
-//         Search job
-//       </button>
-//     </div>
-//   );
-// };
-
-const UploadResume = () => {
+const UploadResume = ({ onFileUpload }: { onFileUpload: (files: File[]) => void }) => {
   return (
-    <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-md">
-      <div className="border-dashed border-2 border-gray-300 dark:border-neutral-500 rounded-lg p-6 flex justify-center items-center h-40">
-        <span className="text-gray-600 dark:text-gray-300">
-          Upload your resume
-        </span>
+    <div className="flex flex-col items-center">
+      <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
+        <FileUpload onChange={onFileUpload} />
       </div>
-      <button className="mt-4 bg-indigo-500 text-white px-6 py-2 rounded-lg">
+      <button className="mt-4 bg-indigo-500 text-white px-8 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
         Search job
       </button>
     </div>
@@ -189,7 +145,7 @@ const UploadResume = () => {
 
 const FilterForm = () => {
   return (
-    <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-md">
+    <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-md max-w-4xl mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input
           type="text"
@@ -217,13 +173,14 @@ const FilterForm = () => {
           className="p-2 border border-gray-300 dark:border-neutral-500 rounded-md col-span-1 sm:col-span-2"
         />
       </div>
-      <button className="mt-4 bg-indigo-500 text-white px-6 py-2 rounded-lg">
-        Search job
-      </button>
+      <div className="flex justify-center mt-4">
+        <button className="bg-indigo-500 text-white px-8 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+          Search job
+        </button>
+      </div>
     </div>
   );
 };
-
 
 const Logo = () => {
   return (
@@ -238,7 +195,7 @@ const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-       Jobs
+        Jobs
       </motion.span>
     </Link>
   );
@@ -255,4 +212,3 @@ const LogoIcon = () => {
     </Link>
   );
 };
-
