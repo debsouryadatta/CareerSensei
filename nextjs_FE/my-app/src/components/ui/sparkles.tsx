@@ -266,7 +266,7 @@ export const SparklesCore = (props: ParticlesProps) => {
                 close: true,
                 fill: true,
                 options: {},
-                type: "circle",
+                type: "circle" as SingleOrMultiple<string>,
               },
               size: {
                 value: {

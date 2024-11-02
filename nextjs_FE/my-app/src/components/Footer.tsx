@@ -1,5 +1,4 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 import Link from "next/link";
 
@@ -12,7 +11,6 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">Company</h3>
             <ul className="space-y-2">
               <li><Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-indigo-400">About Us</Link></li>
-             
               <li><Link href="/blog" className="text-gray-600 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-indigo-400">Blog</Link></li>
             </ul>
           </div>
@@ -37,8 +35,15 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">Subscribe to our newsletter</h3>
             <p className="text-gray-600 dark:text-gray-300">Stay updated with the latest features and releases.</p>
             <form className="flex space-x-2">
-              <Input type="email" placeholder="Enter your email" className="flex-grow" />
-              <button type="submit" className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-4 py-2 rounded">
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                className="flex-grow p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 dark:bg-neutral-800 dark:border-gray-600 dark:text-white"
+              />
+              <button 
+                type="submit" 
+                className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-4 py-2 rounded"
+              >
                 Subscribe
               </button>
             </form>

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
 import { FileUpload } from "../../components/ui/file-upload";
@@ -22,7 +23,7 @@ export default function JobSearch() {
   const [files, setFiles] = useState<File[]>([]);
   const handleFileUpload = (files: File[]) => {
     setFiles(files);
-    console.log(files);
+    console.log("Uploaded files: ", files); // Use the files here or in the search function
   };
 
   const links: Link[] = [
@@ -58,6 +59,15 @@ export default function JobSearch() {
 
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
+
+  const handleSearchJob = () => {
+    if (files.length > 0) {
+      // Implement your search job logic using the files
+      console.log("Searching job with files: ", files);
+    } else {
+      console.log("No files uploaded");
+    }
+  };
 
   return (
     <div className="flex h-screen">
@@ -120,7 +130,7 @@ export default function JobSearch() {
           </div>
 
           {tab === "resume" ? (
-            <UploadResume onFileUpload={handleFileUpload} />
+            <UploadResume onFileUpload={handleFileUpload} onSearch={handleSearchJob} />
           ) : (
             <FilterForm />
           )}
@@ -130,13 +140,22 @@ export default function JobSearch() {
   );
 }
 
-const UploadResume = ({ onFileUpload }: { onFileUpload: (files: File[]) => void }) => {
+const UploadResume = ({
+  onFileUpload,
+  onSearch,
+}: {
+  onFileUpload: (files: File[]) => void;
+  onSearch: () => void;
+}) => {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
         <FileUpload onChange={onFileUpload} />
       </div>
-      <button className="mt-4 bg-indigo-500 text-white px-8 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+      <button
+        className="mt-4 bg-indigo-500 text-white px-8 py-2 rounded-lg hover:bg-indigo-600 transition-colors"
+        onClick={onSearch}
+      >
         Search job
       </button>
     </div>

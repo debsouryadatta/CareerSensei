@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
-import { Brain, Target, Filter, LineChart, Bot } from "lucide-react";
+import { Brain, Target, Filter, LineChart } from "lucide-react";
 
 export default function HowItWorks() {
   const features = [
