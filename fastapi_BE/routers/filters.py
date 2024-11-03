@@ -2,6 +2,7 @@ import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from models.models import Filters
+from utils.filters_jobs import process_job_search
 
 
 filter_router = APIRouter(
@@ -10,10 +11,18 @@ filter_router = APIRouter(
     responses={404: {"description": "Not found"}}
 )
 
-@filter_router.get("/job_search")
+@filter_router.post("/job_search")
 async def job_search(filters: Filters):
     try:
-        return JSONResponse(content={"success": True, "message": "Job Search"}, status_code=200)
+        # Convert Filters model to dict
+        filter_dict = filters.dict(exclude_none=True)
+        # Process job search
+        results = await process_job_search(filter_dict)
+        return JSONResponse(content={
+                "success": True,
+                "message": "Job search processed successfully",
+                "job_matches": results["job_matches"]
+            }, status_code=200)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
