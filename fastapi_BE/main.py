@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
 import traceback
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, APIRouter
+from routers import filters
+from routers import resume
+from routers import user
 import uvicorn
 
 from db.db import create_table, get_session
@@ -32,15 +35,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# router = APIRouter(
-#     prefix="/api/v1"
-# )
-# router.include_router(user.router)
+router = APIRouter(
+    prefix="/api/v1"
+)
+router.include_router(user.user_router)
+router.include_router(resume.resume_router)
+router.include_router(filters.filter_router)
+app.include_router(router)
 
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
 
 if __name__ == "__main__":
     uvicorn.run(
