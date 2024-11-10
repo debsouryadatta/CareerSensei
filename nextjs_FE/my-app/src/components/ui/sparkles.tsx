@@ -1,5 +1,5 @@
 "use client";
-import React, { useId, useMemo } from "react";
+import React, { useId } from "react";
 import { useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import type { Container, SingleOrMultiple } from "@tsparticles/engine";
@@ -266,7 +266,7 @@ export const SparklesCore = (props: ParticlesProps) => {
                 close: true,
                 fill: true,
                 options: {},
-                type: "circle",
+                type: "circle" as SingleOrMultiple<string>,
               },
               size: {
                 value: {
