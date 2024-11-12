@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { useRouter } from 'next/navigation';
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,15 @@ export default function SignIn() {
       setLoading(false);
     }
   };
+
+  const { loginWithRedirect } = useAuth0();
+  const handleGoogleSignIn = async () => {
+    await loginWithRedirect({
+      authorizationParams: {
+        prompt: "login",
+      },
+    });
+  }
 
 
   return (
@@ -95,7 +105,7 @@ export default function SignIn() {
             </div>
             
             <button
-              onClick={() => {/* Add Google OAuth logic */}}
+              onClick={handleGoogleSignIn}
               className="mt-4 w-full py-3 rounded-lg border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">

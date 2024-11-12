@@ -25,16 +25,16 @@ load_dotenv()
 
 # Define the output schema
 class JobMatch(BaseModel):
-    job_title: str = Field(description="The title of the job position")
-    required_experience: Optional[str] = Field(description="Years of experience required", default=None)
-    technologies: Optional[List[str]] = Field(description="Key technologies and tools required", default=None)
-    work_type: str = Field(description="Type of work arrangement (remote/hybrid/onsite)")
-    location: str = Field(description="Location of the job")
-    company: str = Field(description="Name of the hiring company")
-    required_qualifications: List[str] = Field(description="List of required qualifications for the position")
-    application_link: Optional[str] = Field(description="Link to apply for the position", default=None)
-    job_description: Optional[str] = Field(description="Brief description of the job role", default=None)
-    salary_range: Optional[str] = Field(description="Salary range if available", default=None)
+    job_title: str
+    required_experience: str
+    technologies: List[str]
+    work_type: str
+    location: str
+    company: str
+    required_qualifications: List[str]
+    application_link: str
+    job_description: str
+    salary_range: str
 
 class JobMatchesResponse(BaseModel):
     matches: List[JobMatch] = Field(description="List of matching job opportunities")
@@ -69,15 +69,15 @@ class ResumeProcessor:
         Your response should be a JSON object containing:
         1. A list of job matches, where each match includes:
            - job_title: The title of the position
-           - required_experience: Years of experience required (if available)
-           - technologies: List of key technologies and tools required (if available)
-           - work_type: Whether remote, hybrid, or onsite
-           - location: Job location
-           - company: Name of the hiring company
-           - required_qualifications: List of required skills and qualifications
-           - application_link: Link to apply (if available)
-           - job_description: Brief description of the role (if available)
-           - salary_range: Salary information (if available)
+           - required_experience: Years of experience required ('NA' if not available)
+           - technologies: List of key technologies and tools required (['NA'] if not available)
+           - work_type: Whether remote, hybrid, or onsite ('NA' if not available)
+           - location: Job location ('NA' if not available)
+           - company: Name of the hiring company ('NA' if not available)
+           - required_qualifications: List of required skills and qualifications (['NA'] if not available)
+           - application_link: Link to apply ('NA' if not available)
+           - job_description: Brief description of the role ('NA' if not available)
+           - salary_range: Salary information ('NA' if not available)
         2. A search_summary field with a brief overview of the results
         """
         
@@ -146,9 +146,9 @@ class ResumeProcessor:
                     {resume_analysis}
 
                     Based on this analysis, please search for current job openings that match this candidate's profile. 
-                    Find at least 3-5 relevant positions and format the response as a JSON object with 'matches' and 'search_summary' fields.
-                    Each job match should include job_title, required_experience (if available), technologies (if available), work_type, location, company, required_qualifications, application_link, 
-                    job_description (if available), and salary_range (if available).""")
+                    Find at least 10 or more relevant positions and format the response as a JSON object with 'matches' and 'search_summary' fields.
+                    Each job match should include job_title, required_experience, technologies, work_type, location, company, required_qualifications, application_link, 
+                    job_description, and salary_range.""")
             ]
 
             # Get response from agent
