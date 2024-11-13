@@ -16,9 +16,11 @@ class Settings(BaseSettings):
 
     database_url: str
     sambanova_api_key: str
+    auth0_domain: str
+    auth0_audience: str
 
     @classmethod
-    @field_validator("database_url", "sambanova_api_key")
+    @field_validator("database_url", "sambanova_api_key", "auth0_domain", "auth0_audience")
     def check_not_empty(cls, v):
         assert v != "", f"{v} is not defined"
         return v

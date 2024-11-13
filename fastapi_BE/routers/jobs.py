@@ -18,7 +18,7 @@ async def save_job(job: JobCreate, session=Depends(get_session)):
         session.add(db_job)
         session.commit()
         session.refresh(db_job)
-        return {"success": True, "message": "Job saved successfully", "job": db_job}
+        return JSONResponse(content={"success": True, "message": "Job saved successfully", "job": db_job.model_dump()}, status_code=201)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
