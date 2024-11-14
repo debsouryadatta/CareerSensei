@@ -2,5 +2,6 @@
 .venv
 node_modules
 vhacksamenv
+asmbhavenv
 __pycache__
 .DS_Store

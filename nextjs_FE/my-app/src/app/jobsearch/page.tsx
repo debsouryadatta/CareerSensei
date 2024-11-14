@@ -55,29 +55,38 @@ const JobSearch = () => {
  
 
 
-  // // Handle file upload
-  // const handleFileUpload = async (newFiles) => {
-  //   setFiles(newFiles);
-  //   const formData = new FormData();
-  //   formData.append('file', newFiles[0]);
+// Logo Component
+const Logo = () => {
+  return (
+      <Link
+          href="#"
+          aria-label="Acet Labs"
+          className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
+      >
+          <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+          <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="font-medium whitespace-pre"
+          >
+              Jobs
+          </motion.span>
+      </Link>
+  );
+};
 
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const response = await fetch('http://localhost:8000/api/v1/resume/upload', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-      
-  //     if (!response.ok) throw new Error('Resume upload failed');
-  //     const data = await response.json();
-  //     setJobMatches(data.job_matches.matches);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+// LogoIcon Component
+const LogoIcon = () => {
+  return (
+      <Link
+          href="#"
+          aria-label="Acet Labs Logo"
+          className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
+      >
+          <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+      </Link>
+  );
+};
 
   // Handle file upload
 const handleFileUpload = async (newFiles) => {
@@ -120,31 +129,47 @@ const handleFileUpload = async (newFiles) => {
     console.log("Upload process completed");
   }
 };
+// Handle job search
+const handleJobSearch = async (filterData = {}) => {
+  console.log("Starting job search with filter data:", filterData);
+  
+  try {
+    setLoading(true);
+    setError(null);
+    
+    const response = await fetch('http://localhost:8000/api/v1/filters/job_search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(filterData),
+    });
 
+    console.log("Response status:", response.status);
 
-  // Handle job search
-  const handleJobSearch = async (filterData = {}) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch('http://localhost:8000/api/v1/filters/job_search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(filterData),
-      });
-
-      if (!response.ok) throw new Error('Job search failed');
-
-      const data = await response.json();
-      setJobMatches(data.job_matches.matches);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      console.error("Job search failed:", response.statusText);
+      throw new Error('Job search failed');
     }
-  };
+
+    const data = await response.json();
+    console.log("Received data from server:", data);
+
+    if (data.job_matches && data.job_matches.matches) {
+      setJobMatches(data.job_matches.matches);
+      console.log("Job matches found:", data.job_matches.matches);
+    } else {
+      console.warn("No job matches found in response");
+    }
+  } catch (err) {
+    console.error("Error during job search:", err.message);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+    console.log("Job search completed");
+  }
+};
+
 
   // Upload Resume Component
   const UploadResume = () => (
@@ -310,7 +335,7 @@ const handleFileUpload = async (newFiles) => {
             <Sidebar open={open} setOpen={setOpen}>
                 <SidebarBody className="justify-between gap-10">
                     <div className="flex flex-col flex-1 overflow-y-auto">
-                        {/* {open ? <Logo /> : <LogoIcon />} */}
+                        {open ? <Logo /> : <LogoIcon />} 
                         <div className="mt-8 flex flex-col gap-2">
                             {links.map((link, idx) => (
                                 <SidebarLink key={idx} link={link} />
