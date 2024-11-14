@@ -22,39 +22,13 @@ const JobSearch = () => {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
 
-  const links = [
-    {
-        label: "Dashboard",
-        href: "#",
-        icon: (
-            <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-    },
-    {
-        label: "Profile",
-        href: "#",
-        icon: (
-            <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-    },
-    {
-        label: "Settings",
-        href: "#",
-        icon: (
-            <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-    },
-    {
-        label: "Logout",
-        href: "#",
-        icon: (
-            <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-    },
+const links = [
+  { label: "Dashboard", href: "#", icon: <IconBrandTabler className="h-5 w-5" /> },
+  { label: "Profile", href: "#", icon: <IconUserBolt className="h-5 w-5" /> },
+  { label: "Settings", href: "#", icon: <IconSettings className="h-5 w-5" /> },
+  { label: "Logout", href: "#", icon: <IconArrowLeft className="h-5 w-5" /> },
 ];
  
-
-
 // Logo Component
 const Logo = () => {
   return (
@@ -264,7 +238,7 @@ const handleJobSearch = async (filterData = {}) => {
             onChange={(e) => setFilters({...filters, technologies: e.target.value})}
           />
         </div>
-        <Button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600">
+        <Button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white">
           Search Jobs
         </Button>
       </form>
@@ -327,91 +301,98 @@ const handleJobSearch = async (filterData = {}) => {
     </Card>
   );
 
-
-
   return (
-
-       <div className="flex h-screen">
-            <Sidebar open={open} setOpen={setOpen}>
-                <SidebarBody className="justify-between gap-10">
-                    <div className="flex flex-col flex-1 overflow-y-auto">
-                        {open ? <Logo /> : <LogoIcon />} 
-                        <div className="mt-8 flex flex-col gap-2">
-                            {links.map((link, idx) => (
-                                <SidebarLink key={idx} link={link} />
-                            ))}
-                        </div>
-                    </div>
-                    <div>
-                        <SidebarLink
-                            link={{
-                                label: "Sonika",
-                                href: "#",
-                                icon: (
-                                    <Image
-                                        src="/api/placeholder/50/50"
-                                        className="h-7 w-7 flex-shrink-0 rounded-full"
-                                        width={50}
-                                        height={50}
-                                        alt="Avatar"
-                                    />
-                                ),
-                            }}
-                        />
-                    </div>
-                </SidebarBody>
-            </Sidebar>
-     
-      <div className="flex-1 p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
+    <div className="flex flex-col lg:flex-row h-screen">
+      {/* Sidebar Section */}
+      <Sidebar open={open} setOpen={setOpen} className="w-full lg:w-64 lg:flex-shrink-0">
+        <SidebarBody className="justify-between gap-10">
+          <div className="flex flex-col flex-1 overflow-y-auto">
+            {open ? <Logo /> : <LogoIcon />}
+            <div className="mt-8 flex flex-col gap-2">
+              {links.map((link, idx) => (
+                <SidebarLink key={idx} link={link} />
+              ))}
+            </div>
+          </div>
+          <div>
+            <SidebarLink
+              link={{
+                label: "Sonika",
+                href: "#",
+                icon: (
+                  <Image
+                    src="/api/placeholder/50/50"
+                    className="h-7 w-7 flex-shrink-0 rounded-full"
+                    width={50}
+                    height={50}
+                    alt="Avatar"
+                  />
+                ),
+              }}
+            />
+          </div>
+        </SidebarBody>
+      </Sidebar>
+  
+      {/* Main Content Area */}
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardContent className="p-6">
-              <h1 className="text-2xl font-bold mb-6 text-center">Find Your Next Job</h1>
-              
+          <Card className="shadow-lg">
+            <CardContent className="p-4 lg:p-6">
+              <h1 className="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 text-center">
+                Find Your Next Job
+              </h1>
+  
+              {/* Tabs Section */}
               <Tabs defaultValue="resume" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger 
+                <TabsList className="grid w-full grid-cols-2 gap-2 lg:gap-0 mb-4 lg:mb-6">
+                  <TabsTrigger
                     value="resume"
                     onClick={() => setTab("resume")}
+                    className="text-sm lg:text-base"
                   >
                     Search by Resume
                   </TabsTrigger>
-                  <TabsTrigger 
+                  <TabsTrigger
                     value="filter"
                     onClick={() => setTab("filter")}
+                    className="text-sm lg:text-base"
                   >
                     Search by Filters
                   </TabsTrigger>
                 </TabsList>
-
+  
                 <TabsContent value="resume">
                   <UploadResume />
                 </TabsContent>
-
+  
                 <TabsContent value="filter">
                   <FilterForm />
                 </TabsContent>
               </Tabs>
-
+  
+              {/* Error Message */}
               {error && (
                 <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
                   {error}
                 </div>
               )}
-
+  
+              {/* Loading Indicator */}
               {loading && (
                 <div className="mt-4 text-center text-gray-600">
                   Loading...
                 </div>
               )}
-
+  
+              {/* Job Matches */}
               {jobMatches.length > 0 && (
                 <div className="mt-8 space-y-6">
-                  <h2 className="text-xl font-bold mb-4">
+                  <h2 className="text-lg lg:text-xl font-bold mb-4">
                     Found {jobMatches.length} matching positions
                   </h2>
                   {jobMatches.map((job, index) => (
-                    <JobCard key={index} job={job} />
+                    <JobCard key={index} job={job} className="w-full" />
                   ))}
                 </div>
               )}
@@ -421,6 +402,7 @@ const handleJobSearch = async (filterData = {}) => {
       </div>
     </div>
   );
+  
 };
 
 export default JobSearch;
