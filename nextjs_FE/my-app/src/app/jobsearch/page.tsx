@@ -12,6 +12,7 @@ import { IconBrandTabler, IconSettings, IconUserBolt, IconArrowLeft } from '@tab
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Bookmark, BookmarkPlus } from 'lucide-react';
 
 
 const JobSearch = () => {
@@ -208,6 +209,28 @@ const handleJobSearch = async (filterData = {}) => {
       handleJobSearch(formattedFilters);
     };
 
+
+    const handleSaveJob = async (job) => {
+      try {
+        const response = await fetch('/jobs/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(job),
+        });
+    
+        if (response.ok) {
+          alert('Job saved successfully!');
+        } else {
+          console.error('Failed to save job');
+        }
+      } catch (error) {
+        console.error('Error saving job:', error);
+      }
+    };
+    
+
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,60 +268,75 @@ const handleJobSearch = async (filterData = {}) => {
     );
   };
 
+
   // Job Card Component
-  const JobCard = ({ job }) => (
-    <Card className="mb-4 hover:shadow-lg transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-xl font-semibold mb-2">{job.job_title}</h3>
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Building2 className="w-4 h-4" />
-              <span>{job.company}</span>
-            </div>
-          </div>
-          <Badge variant="secondary">{job.work_type}</Badge>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-4">
+const JobCard = ({ job, onSave }) => (
+  <Card className="mb-4 hover:shadow-lg transition-shadow">
+    <CardContent className="p-6">
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="text-xl font-semibold mb-2">{job.job_title}</h3>
           <div className="flex items-center space-x-2 text-gray-600">
-            <MapPin className="w-4 h-4" />
-            <span>{job.location}</span>
-          </div>
-          <div className="flex items-center space-x-2 text-gray-600">
-            <Clock className="w-4 h-4" />
-            <span>{job.required_experience}</span>
-          </div>
-          <div className="flex items-center space-x-2 text-gray-600">
-            <Coins className="w-4 h-4" />
-            <span>{job.salary_range}</span>
+            <Building2 className="w-4 h-4" />
+            <span>{job.company}</span>
           </div>
         </div>
+        <Badge variant="secondary">{job.work_type}</Badge>
+      </div>
 
-        <div className="mb-4">
-          <h4 className="font-medium mb-2">Technologies:</h4>
-          <div className="flex flex-wrap gap-2">
-            {job.technologies.map((tech, index) => (
-              <Badge key={index} variant="outline">{tech}</Badge>
-            ))}
-          </div>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="flex items-center space-x-2 text-gray-600">
+          <MapPin className="w-4 h-4" />
+          <span>{job.location}</span>
         </div>
-
-        <p className="text-gray-600 mb-4">{job.job_description}</p>
-
-        <div className="flex justify-end">
-          <a
-            href={job.application_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 text-indigo-600 hover:text-indigo-500"
-          >
-            <span>Apply Now</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
+        <div className="flex items-center space-x-2 text-gray-600">
+          <Clock className="w-4 h-4" />
+          <span>{job.required_experience}</span>
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex items-center space-x-2 text-gray-600">
+          <Coins className="w-4 h-4" />
+          <span>{job.salary_range}</span>
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <h4 className="font-medium mb-2">Technologies:</h4>
+        <div className="flex flex-wrap gap-2">
+          {job.technologies.map((tech, index) => (
+            <Badge key={index} variant="outline">{tech}</Badge>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-gray-600 mb-4">{job.job_description}</p>
+
+      {/* Apply Now and Save Button */}
+  
+
+<div className="flex justify-between items-center">
+  {/* Apply Now Button */}
+  <a
+    href={job.application_link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center space-x-2 text-indigo-600 hover:text-indigo-500"
+  >
+    <span>Apply Now</span>
+    <ExternalLink className="w-4 h-4" />
+  </a>
+
+  {/* Save Button with Icon */}
+  <button
+    onClick={() => onSave(job)}
+    className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
+  >
+    <BookmarkPlus className="w-6 h-6" />
+  </button>
+</div>
+
+    </CardContent>
+  </Card>
+
   );
 
   return (
