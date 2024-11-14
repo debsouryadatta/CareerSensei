@@ -2,41 +2,35 @@ import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
+from db.db import get_session
+from auth.auth import validate_token
+from models.models import UserCreate, Users
+
 
 user_router = APIRouter(
     prefix="/user",
     tags=["user"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(validate_token)]
 )
 
-# Sign up
-@user_router.post("/signup")
-async def signup():
+@user_router.post("/register")
+async def register_user(user_data: UserCreate, session=Depends(get_session)):
     try:
-        return JSONResponse(content={"success": True, "message": "User Signed Up"}, status_code=201)
+        print(f"User data: {user_data}")
+        user_exists = session.query(Users).filter(Users.email == user_data.email).first()
+        if user_exists:
+            return JSONResponse(content={"success": True, "message": "User already exists", "user_data": user_exists.model_dump()}, status_code=200)
+        else:
+            db_user = Users(**user_data.model_dump())
+            session.add(db_user)
+            session.commit()
+            session.refresh(db_user)
+            return JSONResponse(content={"success": True, "message": "User registered successfully", "user_data": db_user.model_dump()}, status_code=201)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
     
-
-# Sign in
-@user_router.post("/signin")
-async def signin():
-    try:
-        return JSONResponse(content={"success": True, "message": "User Signed in"}, status_code=200)
-    except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
-    
-
-
-@user_router.get("/me")
-async def me():
-    try:
-        return JSONResponse(content={"success": True, "message": "Hey! Thats me"}, status_code=201)
-    except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
         
         
         

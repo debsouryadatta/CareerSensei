@@ -35,9 +35,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-### Steps for implementing auth0
-1. Create a new Single Page Application in Auth0
-2. Add the auth provider in the providers.tsx & wrap the layout children with the provider
-3. Provide the domain, clientId, redirectUri, audience from the .env
-4. 

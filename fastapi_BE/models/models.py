@@ -1,8 +1,9 @@
 from typing import List, Optional
 from pydantic import BaseModel
-from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship, SQLModel, Field
 from sqlalchemy import Column, JSON
 
+# Jobs Table/Schema
 class JobBase(SQLModel):
     job_title: str
     required_experience: str
@@ -17,7 +18,28 @@ class JobBase(SQLModel):
 
 class JobCreate(JobBase):
     pass
+
+class Jobs(JobBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    user: Optional["Users"] = Relationship(back_populates="jobs")
+
+
+# Users Table/Schema
+class UserBase(SQLModel):
+    name: str
+    email: str
+    image: str
+
+class UserCreate(UserBase):
+    pass
     
+class Users(UserBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    jobs: List["Jobs"] = Relationship(back_populates="user")
+    
+    
+# Filters Schema
 class Filters(BaseModel):
     job_title: str
     required_experience: Optional[str] = None
@@ -26,7 +48,3 @@ class Filters(BaseModel):
     location: Optional[str] = None
     company: Optional[str] = None 
     salary_range: Optional[str] = None
-
-
-class Jobs(JobBase, table=True):
-    id: int = Field(default=None, primary_key=True)
