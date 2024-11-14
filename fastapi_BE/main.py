@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 import traceback
 from fastapi import Depends, FastAPI, APIRouter
+from routers import jobs
 from routers import filters
 from routers import resume
 from routers import user
@@ -41,6 +42,7 @@ router = APIRouter(
 router.include_router(user.user_router)
 router.include_router(resume.resume_router)
 router.include_router(filters.filter_router)
+router.include_router(jobs.jobs_router)
 app.include_router(router)
 
 
