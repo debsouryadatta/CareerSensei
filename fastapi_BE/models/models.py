@@ -37,6 +37,7 @@ class UserCreate(UserBase):
 class Users(UserBase, table=True):
     id: int = Field(default=None, primary_key=True)
     jobs: List["Jobs"] = Relationship(back_populates="user")
+    cover_letters: List["CoverLetters"] = Relationship(back_populates="user")
     
     
 # Filters Schema
@@ -48,3 +49,18 @@ class Filters(BaseModel):
     location: Optional[str] = None
     company: Optional[str] = None 
     salary_range: Optional[str] = None
+    
+    
+# Cover Letter Schema
+class CoverLetterBase(SQLModel):
+    cover_letter: str
+    resume_text: str
+    job_description: str
+    
+class CoverLetterCreate(CoverLetterBase):
+    pass
+
+class CoverLetters(CoverLetterBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    user: Optional["Users"] = Relationship(back_populates="cover_letters")

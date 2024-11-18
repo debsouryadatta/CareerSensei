@@ -13,3 +13,5 @@
 - find job by filters routes ✅
 - save jobs to db ✅
 - auth0 okta integration ✅
+- cover letter creation ✅
+- save, getall, get_by_id, delete endpoints for jobs, cover letters ✅

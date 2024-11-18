@@ -5,6 +5,7 @@ from routers import jobs
 from routers import filters
 from routers import resume
 from routers import user
+from routers import cover_letter
 import uvicorn
 
 from db.db import create_table, get_session
@@ -43,6 +44,7 @@ router.include_router(user.user_router)
 router.include_router(resume.resume_router)
 router.include_router(filters.filter_router)
 router.include_router(jobs.jobs_router)
+router.include_router(cover_letter.cover_letter_router)
 app.include_router(router)
 
 
