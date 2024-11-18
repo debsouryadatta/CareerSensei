@@ -7,6 +7,38 @@ import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root
 
+// const TabsList = React.forwardRef<
+//   React.ElementRef<typeof TabsPrimitive.List>,
+//   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+// >(({ className, ...props }, ref) => (
+//   <TabsPrimitive.List
+//     ref={ref}
+//     className={cn(
+//       "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+//       className
+//     )}
+//     {...props}
+//   />
+// ))
+// TabsList.displayName = TabsPrimitive.List.displayName
+
+// const TabsList = React.forwardRef<
+//   React.ElementRef<typeof TabsPrimitive.List>,
+//   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+// >(({ className, ...props }, ref) => (
+//   <TabsPrimitive.List
+//     ref={ref}
+//     className={cn(
+//       "inline-flex h-10 items-center justify-center rounded-lg bg-gray-200 p-1",
+//       "text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+//       className
+//     )}
+//     {...props}
+//   />
+// ));
+// TabsList.displayName = TabsPrimitive.List.displayName;
+
+
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
@@ -14,13 +46,19 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+      "inline-flex h-10 items-center justify-center rounded-lg p-1",
+      "bg-gray-200 border border-gray-300", // Added border and color
+      "text-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600", // Dark mode adjustments
       className
     )}
     {...props}
   />
-))
-TabsList.displayName = TabsPrimitive.List.displayName
+));
+TabsList.displayName = TabsPrimitive.List.displayName;
+
+
+
+
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
