@@ -8,6 +8,7 @@ from io import BytesIO
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import json
+import base64
 
 # LangChain imports
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -48,12 +49,52 @@ class ResumeProcessor:
             model="Meta-Llama-3.1-70B-Instruct",
             temperature=0.7
         )
+        self.vision_model = ChatOpenAI(
+            api_key=settings.sambanova_api_key,
+            base_url="https://api.sambanova.ai/v1",
+            model="Llama-3.2-90B-Vision-Instruct",
+            max_tokens=1000
+        )
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=100
         )
         self.output_parser = PydanticOutputParser(pydantic_object=JobMatchesResponse)
         self.setup_agent()
+
+    def _process_image_bytes(self, image_bytes: bytes) -> str:
+        """Process image from bytes and convert to base64."""
+        return base64.b64encode(image_bytes).decode('utf-8')
+
+    async def extract_text_from_image(self, image_bytes: bytes) -> str:
+        """Extract text from image using vision model."""
+        try:
+            # Process image bytes to base64
+            image_data = self._process_image_bytes(image_bytes)
+
+            # Create message with image
+            message = HumanMessage(
+                content=[
+                    {
+                        "type": "text",
+                        "text": "Extract all text from this resume image. Format it clearly and preserve the structure."
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{image_data}",
+                            "detail": "high"
+                        }
+                    }
+                ]
+            )
+
+            # Get response from vision model
+            response = await self.vision_model.ainvoke([message])
+            return response.content
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error analyzing image: {str(e)}")
 
     def setup_agent(self):
         """Set up the LangChain agent with necessary tools and prompts"""
@@ -190,15 +231,18 @@ class ResumeProcessor:
             traceback.print_exc()
             raise HTTPException(status_code=500, detail=f"Error searching jobs: {str(e)}")
 
-async def process_resume(pdf_content: bytes) -> Dict:
+async def process_resume(file_content: bytes, file_type: str) -> Dict:
     """Process resume content and return analysis and job matches"""
     try:
         processor = ResumeProcessor()
         
-        # Extract text from PDF
-        text_content = await processor.extract_text_from_pdf(pdf_content)
+        # Extract text based on file type
+        if file_type == "pdf":
+            text_content = await processor.extract_text_from_pdf(file_content)
+        else:  # image
+            text_content = await processor.extract_text_from_image(file_content)
         
-        # Analyze resume
+        # Analyze the extracted text
         resume_analysis = await processor.analyze_resume(text_content)
         
         # Search for matching jobs
@@ -208,6 +252,7 @@ async def process_resume(pdf_content: bytes) -> Dict:
             "resume_analysis": resume_analysis,
             "job_matches": job_matches.dict()  # Convert Pydantic model to dict
         }
+        
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
