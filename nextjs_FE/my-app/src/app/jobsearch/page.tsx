@@ -24,47 +24,81 @@ const JobSearch = () => {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
 
-  // Handle file upload
-const handleFileUpload = async (newFiles) => {
+const handleFileUpload = async (newFiles: File[]) => {
   setFiles(newFiles);
-  console.log("Selected Files:", newFiles);
-
   const formData = new FormData();
   formData.append('file', newFiles[0]);
-
-  console.log("FormData:", formData.get('file'));
+  formData.append('file_type', newFiles[0].type === 'application/pdf' ? 'pdf' : 'image');
 
   try {
     setLoading(true);
     setError(null);
 
-    console.log("Sending request to upload resume...");
     const response = await fetch('http://localhost:8000/api/v1/resume/upload', {
       method: 'POST',
       body: formData,
     });
 
-    console.log("Response Status:", response.status);
-
     if (!response.ok) {
-      console.error("Resume upload failed");
       throw new Error('Resume upload failed');
     }
 
-    const data = await response.json();
-    console.log("Response Data:", data);
-
-    setJobMatches(data.job_matches.matches);
-    console.log("Job Matches:", data.job_matches.matches);
+    const data: ResumeUploadResponse = await response.json();
+    
+    if (data.success && data.data.job_matches.matches) {
+      setJobMatches(data.data.job_matches.matches);
+    }
 
   } catch (err) {
-    console.error("Error during upload:", err.message);
-    setError(err.message);
+    setError(err instanceof Error ? err.message : 'An unknown error occurred');
   } finally {
     setLoading(false);
-    console.log("Upload process completed");
   }
 };
+
+const UploadResume = () => (
+  <div className="space-y-4">
+    <div
+      className="border-2 border-dashed rounded-lg p-8 text-center"
+      onDrop={(e) => {
+        e.preventDefault();
+        handleFileUpload(Array.from(e.dataTransfer.files));
+      }}
+      onDragOver={(e) => e.preventDefault()}
+    >
+      <input
+        type="file"
+        onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
+        className="hidden"
+        id="file-upload"
+        accept=".pdf,.doc,.docx"
+      />
+      <label
+        htmlFor="file-upload"
+        className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+      >
+        Upload Resume
+      </label>
+      <p className="mt-2 text-sm text-gray-500">
+        {files.length > 0 
+          ? `Selected: ${files.map(f => f.name).join(', ')}`
+          : 'Drag and drop your resume here or click to browse'}
+      </p>
+    </div>
+    
+    <Button
+      onClick={() => handleFileUpload(files)}
+      className="w-full bg-indigo-500 text-white"
+      disabled={files.length === 0}
+    >
+     Upload and Search Jobs
+    </Button>
+  </div>
+);
+
+
+
+
 // Handle job search
 const handleJobSearch = async (filterData = {}) => {
   console.log("Starting job search with filter data:", filterData);
@@ -106,48 +140,6 @@ const handleJobSearch = async (filterData = {}) => {
   }
 };
 
-
-  // Upload Resume Component
-  const UploadResume = () => (
-    <div className="space-y-4">
-      <div
-        className="border-2 border-dashed rounded-lg p-8 text-center"
-        onDrop={(e) => {
-          e.preventDefault();
-          handleFileUpload(Array.from(e.dataTransfer.files));
-        }}
-        onDragOver={(e) => e.preventDefault()}
-      >
-        <input
-          type="file"
-          onChange={(e) => handleFileUpload(Array.from(e.target.files))}
-          className="hidden"
-          id="file-upload"
-          accept=".pdf,.doc,.docx"
-        />
-        <label
-          htmlFor="file-upload"
-          className="cursor-pointer text-indigo-600 hover:text-indigo-500"
-        >
-          Upload Resume
-        </label>
-        <p className="mt-2 text-sm text-gray-500">
-          {files.length > 0 
-            ? `Selected: ${files.map(f => f.name).join(', ')}`
-            : 'Drag and drop your resume here or click to browse'}
-        </p>
-
-      </div>
-      
-      <Button
-        onClick={handleFileUpload}
-        className="w-full bg-indigo-500 text-white"
-        disabled={files.length === 0}
-      >
-       Upload and Search Jobs
-      </Button>
-    </div>
-  );
 
   // Filter Form Component
   const FilterForm = () => {
