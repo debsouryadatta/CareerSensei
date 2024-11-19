@@ -53,7 +53,7 @@ const ResumeScore = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 dark:bg-neutral-800 ">
         <SidebarComponent />
       <Card className="w-full max-w-4xl mx-auto">
         <CardContent className="p-6">
