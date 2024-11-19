@@ -13,6 +13,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Bookmark, BookmarkPlus } from 'lucide-react';
+import SidebarComponent from '@/components/Sidebar';
 
 
 const JobSearch = () => {
@@ -22,46 +23,6 @@ const JobSearch = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
-
-const links = [
-  { label: "Dashboard", href: "#", icon: <IconBrandTabler className="h-5 w-5" /> },
-  { label: "Profile", href: "#", icon: <IconUserBolt className="h-5 w-5" /> },
-  { label: "Settings", href: "#", icon: <IconSettings className="h-5 w-5" /> },
-  { label: "Logout", href: "#", icon: <IconArrowLeft className="h-5 w-5" /> },
-];
- 
-// Logo Component
-const Logo = () => {
-  return (
-      <Link
-          href="#"
-          aria-label="Acet Labs"
-          className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
-      >
-          <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
-          <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="font-medium whitespace-pre"
-          >
-              Jobs
-          </motion.span>
-      </Link>
-  );
-};
-
-// LogoIcon Component
-const LogoIcon = () => {
-  return (
-      <Link
-          href="#"
-          aria-label="Acet Labs Logo"
-          className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
-      >
-          <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
-      </Link>
-  );
-};
 
   // Handle file upload
 const handleFileUpload = async (newFiles) => {
@@ -342,36 +303,8 @@ const JobCard = ({ job, onSave }) => (
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       {/* Sidebar Section */}
-      <Sidebar open={open} setOpen={setOpen} className="w-full lg:w-64 lg:flex-shrink-0">
-        <SidebarBody className="justify-between gap-10">
-          <div className="flex flex-col flex-1 overflow-y-auto">
-            {open ? <Logo /> : <LogoIcon />}
-            <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
-              ))}
-            </div>
-          </div>
-          <div>
-            <SidebarLink
-              link={{
-                label: "Sonika",
-                href: "#",
-                icon: (
-                  <Image
-                    src="/api/placeholder/50/50"
-                    className="h-7 w-7 flex-shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
-          </div>
-        </SidebarBody>
-      </Sidebar>
-  
+      <SidebarComponent />
+      
       {/* Main Content Area */}
       <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
