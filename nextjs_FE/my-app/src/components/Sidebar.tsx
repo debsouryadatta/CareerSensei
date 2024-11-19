@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 
 const links = [
-  { label: "Dashboard", href: "/", icon: <IconBrandTabler className="h-5 w-5" /> },
+  { label: "Dashboard", href: "/dashboard", icon: <IconBrandTabler className="h-5 w-5" /> },
   { label: "Search Jobs", href: "/jobsearch", icon: <Search className="h-5 w-5" /> },
   { label: "Generate Cover Letter", href: "/coverletter", icon: <FileText className="h-5 w-5" /> },
   { label: "Resume Score", href: "/resumescore", icon: <BarChart2 className="h-5 w-5" /> },

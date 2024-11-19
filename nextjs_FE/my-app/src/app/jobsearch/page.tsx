@@ -96,50 +96,36 @@ const UploadResume = () => (
   </div>
 );
 
+const handleSaveJob = async (job) => {
+  const userId = localStorage.getItem('userId');
+  console.log('userId:', userId);
 
+  if (!userId) {
+    alert('Please log in to save jobs');
+    return;
+  }
 
-
-// Handle job search
-const handleJobSearch = async (filterData = {}) => {
-  console.log("Starting job search with filter data:", filterData);
-  
   try {
-    setLoading(true);
-    setError(null);
-    
-    const response = await fetch('http://localhost:8000/api/v1/filters/job_search', {
+    const response = await fetch(`http://localhost:8000/api/v1/jobs/save/${userId}`, { // Updated URL
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(filterData),
+      body: JSON.stringify(job),
     });
 
-    console.log("Response status:", response.status);
-
-    if (!response.ok) {
-      console.error("Job search failed:", response.statusText);
-      throw new Error('Job search failed');
-    }
-
-    const data = await response.json();
-    console.log("Received data from server:", data);
-
-    if (data.job_matches && data.job_matches.matches) {
-      setJobMatches(data.job_matches.matches);
-      console.log("Job matches found:", data.job_matches.matches);
+    if (response.ok) {
+      alert('Job saved successfully!');
     } else {
-      console.warn("No job matches found in response");
+      const errorData = await response.json();
+      console.error('Failed to save job:', errorData);
+      alert('Failed to save job');
     }
-  } catch (err) {
-    console.error("Error during job search:", err.message);
-    setError(err.message);
-  } finally {
-    setLoading(false);
-    console.log("Job search completed");
+  } catch (error) {
+    console.error('Error saving job:', error);
+    alert('Error saving job');
   }
 };
-
 
   // Filter Form Component
   const FilterForm = () => {
@@ -163,26 +149,6 @@ const handleJobSearch = async (filterData = {}) => {
     };
 
 
-    const handleSaveJob = async (job) => {
-      try {
-        const response = await fetch('/jobs/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(job),
-        });
-    
-        if (response.ok) {
-          alert('Job saved successfully!');
-        } else {
-          console.error('Failed to save job');
-        }
-      } catch (error) {
-        console.error('Error saving job:', error);
-      }
-    };
-    
 
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -280,11 +246,11 @@ const JobCard = ({ job, onSave }) => (
 
   {/* Save Button with Icon */}
   <button
-    onClick={() => onSave(job)}
-    className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
-  >
-    <BookmarkPlus className="w-6 h-6" />
-  </button>
+      onClick={() => onSave(job)}
+      className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
+    >
+      <BookmarkPlus className="w-6 h-6" />
+    </button>
 </div>
 
     </CardContent>
@@ -355,8 +321,13 @@ const JobCard = ({ job, onSave }) => (
                     Found {jobMatches.length} matching positions
                   </h2>
                   {jobMatches.map((job, index) => (
-                    <JobCard key={index} job={job} className="w-full" />
-                  ))}
+                  <JobCard 
+                    key={index} 
+                    job={job} 
+                    onSave={handleSaveJob}
+                    className="w-full" 
+                  />
+                ))}
                 </div>
               )}
             </CardContent>
