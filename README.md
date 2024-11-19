@@ -15,3 +15,4 @@
 - auth0 okta integration ✅
 - cover letter creation ✅
 - save, getall, get_by_id, delete endpoints for jobs, cover letters ✅
+- resume score endpoint ✅
