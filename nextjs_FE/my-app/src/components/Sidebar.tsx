@@ -1,56 +1,92 @@
 "use client";
 
-import React from "react";
-import { SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { IconArrowLeft, IconBrandTabler, IconSettings, IconUserBolt } from "@tabler/icons-react";
-import Link from "next/link";
-import Image from "next/image";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Sidebar, SidebarBody, SidebarLink } from '@/components/ui/sidebar';
+import { IconBrandTabler, IconSettings, IconUserBolt, IconArrowLeft } from '@tabler/icons-react';
+import { Search, FileText, BarChart2 } from 'lucide-react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
-const Sidebar = ({ open, setOpen }) => {
-  const links = [
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5" />,
-    },
-    {
-      label: "Profile",
-      href: "/profile",
-      icon: <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5" />,
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-      icon: <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5" />,
-    },
-    {
-      label: "Logout",
-      href: "/logout",
-      icon: <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5" />,
-    },
-  ];
+
+const links = [
+  { label: "Dashboard", href: "/", icon: <IconBrandTabler className="h-5 w-5" /> },
+  { label: "Search Jobs", href: "/jobsearch", icon: <Search className="h-5 w-5" /> },
+  { label: "Generate Cover Letter", href: "/coverletter", icon: <FileText className="h-5 w-5" /> },
+  { label: "Resume Score", href: "/resumescore", icon: <BarChart2 className="h-5 w-5" /> },
+  { label: "Profile", href: "/profile", icon: <IconUserBolt className="h-5 w-5" /> },
+  { label: "Settings", href: "/settings", icon: <IconSettings className="h-5 w-5" /> },
+  { label: "Logout", href: "/logout", icon: <IconArrowLeft className="h-5 w-5" /> },
+];
+
+const Logo = () => (
+  <Link
+    href="/"
+    aria-label="Jobs Portal"
+    className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
+  >
+    <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="font-medium whitespace-pre"
+    >
+      Jobs
+    </motion.span>
+  </Link>
+);
+
+const LogoIcon = () => (
+  <Link
+    href="/"
+    aria-label="Jobs Portal Logo"
+    className="font-normal flex space-x-2 items-center text-sm text-black dark:text-white py-1 relative z-20"
+  >
+    <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+  </Link>
+);
+
+const SidebarComponent = () => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-900 transition-transform ${open ? "translate-x-0" : "-translate-x-full"} shadow-lg`}>
-      <SidebarBody className="flex flex-col justify-between h-full">
-        <div className="mt-8">
-          <h2 className="text-center text-xl font-bold text-gray-800 dark:text-white">Menu</h2>
-          <div className="flex flex-col mt-4">
-            {links.map((link, idx) => (
-              <SidebarLink key={idx} link={link} />
-            ))}
-          </div>
-        </div>
+    <Sidebar 
+      open={open} 
+      setOpen={setOpen} 
+      className="w-full lg:w-64 lg:flex-shrink-0 d"
+    >
+      <SidebarBody className="justify-between gap-10">
 
-        <div className="p-4">
-          <Link href="/profile" className="flex items-center space-x-2">
-            <Image src="/api/placeholder/50/50" alt="User Avatar" width={50} height={50} className="rounded-full" />
-            <span className="text-gray-800 dark:text-white">Sonika</span>
-          </Link>
+  <div className="flex flex-col flex-1 overflow-y-auto">
+            {open ? <Logo /> : <LogoIcon />}
+            <div className="mt-8 flex flex-col gap-2">
+              {links.map((link, idx) => (
+                <SidebarLink key={idx} link={link} />
+              ))}
+            </div>
+          </div>
+
+        <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
+          <SidebarLink
+            link={{
+              label: "Sonika",
+              href: "#",
+            
+              icon: (
+                <Image
+                  src="/api/placeholder/50/50"
+                  className="h-8 w-8 rounded-full"
+                  width={50}
+                  height={50}
+                  alt="Avatar"
+                />
+              ),
+            }}
+          />
         </div>
       </SidebarBody>
-    </div>
+    </Sidebar>
   );
 };
 
-export default Sidebar;
+export default SidebarComponent;
