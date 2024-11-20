@@ -153,7 +153,7 @@ const GenerateCoverLetter = () => {
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <SidebarComponent />
-      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800">
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10">
             <CardContent className="p-4 lg:p-6">
@@ -268,10 +268,10 @@ const GenerateCoverLetter = () => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="mt-6 p-6 bg-white rounded-lg shadow-md border"
+                  // className="mt-6 p-6 bg-white rounded-lg shadow-md border"
                 >
                   <h3 className="font-semibold mb-4">Generated Cover Letter:</h3>
-                  <pre className="whitespace-pre-wrap text-gray-700">{coverLetter}</pre>
+                  <pre className="whitespace-pre-wrap text-gray-700 w-full">{coverLetter}</pre>
                   <Button
                     onClick={handleSaveCoverLetter}
                     className="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white"
@@ -288,7 +288,7 @@ const GenerateCoverLetter = () => {
                       <ClipboardCopy className="w-6 h-6 mr-2" />
                       Copy Cover Letter
                     </Button>
-                </motion.div>
+                 </motion.div>
               )}
             </CardContent>
           </Card>
