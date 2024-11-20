@@ -24,130 +24,108 @@ const JobSearch = () => {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
 
-  // Handle file upload
-const handleFileUpload = async (newFiles) => {
+const handleFileUpload = async (newFiles: File[]) => {
   setFiles(newFiles);
-  console.log("Selected Files:", newFiles);
-
   const formData = new FormData();
   formData.append('file', newFiles[0]);
-
-  console.log("FormData:", formData.get('file'));
+  formData.append('file_type', newFiles[0].type === 'application/pdf' ? 'pdf' : 'image');
 
   try {
     setLoading(true);
     setError(null);
 
-    console.log("Sending request to upload resume...");
     const response = await fetch('http://localhost:8000/api/v1/resume/upload', {
       method: 'POST',
       body: formData,
     });
 
-    console.log("Response Status:", response.status);
-
     if (!response.ok) {
-      console.error("Resume upload failed");
       throw new Error('Resume upload failed');
     }
 
-    const data = await response.json();
-    console.log("Response Data:", data);
-
-    setJobMatches(data.job_matches.matches);
-    console.log("Job Matches:", data.job_matches.matches);
+    const data: ResumeUploadResponse = await response.json();
+    
+    if (data.success && data.data.job_matches.matches) {
+      setJobMatches(data.data.job_matches.matches);
+    }
 
   } catch (err) {
-    console.error("Error during upload:", err.message);
-    setError(err.message);
+    setError(err instanceof Error ? err.message : 'An unknown error occurred');
   } finally {
     setLoading(false);
-    console.log("Upload process completed");
   }
 };
-// Handle job search
-const handleJobSearch = async (filterData = {}) => {
-  console.log("Starting job search with filter data:", filterData);
-  
-  try {
-    setLoading(true);
-    setError(null);
+
+const UploadResume = () => (
+  <div className="space-y-4">
+    <div
+      className="border-2 border-dashed rounded-lg p-8 text-center"
+      onDrop={(e) => {
+        e.preventDefault();
+        handleFileUpload(Array.from(e.dataTransfer.files));
+      }}
+      onDragOver={(e) => e.preventDefault()}
+    >
+      <input
+        type="file"
+        onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
+        className="hidden"
+        id="file-upload"
+        accept=".pdf,.doc,.docx"
+      />
+      <label
+        htmlFor="file-upload"
+        className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+      >
+        Upload Resume
+      </label>
+      <p className="mt-2 text-sm text-gray-500">
+        {files.length > 0 
+          ? `Selected: ${files.map(f => f.name).join(', ')}`
+          : 'Drag and drop your resume here or click to browse'}
+      </p>
+    </div>
     
-    const response = await fetch('http://localhost:8000/api/v1/filters/job_search', {
+    <Button
+      onClick={() => handleFileUpload(files)}
+      className="w-full bg-indigo-500 text-white"
+      disabled={files.length === 0}
+    >
+     Upload and Search Jobs
+    </Button>
+  </div>
+);
+
+const handleSaveJob = async (job) => {
+  const userId = localStorage.getItem('user_id');
+  console.log('userId:', userId);
+
+  if (!userId) {
+    alert('Please log in to save jobs');
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/v1/jobs/save/${userId}`, { // Updated URL
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(filterData),
+      body: JSON.stringify(job),
     });
 
-    console.log("Response status:", response.status);
-
-    if (!response.ok) {
-      console.error("Job search failed:", response.statusText);
-      throw new Error('Job search failed');
-    }
-
-    const data = await response.json();
-    console.log("Received data from server:", data);
-
-    if (data.job_matches && data.job_matches.matches) {
-      setJobMatches(data.job_matches.matches);
-      console.log("Job matches found:", data.job_matches.matches);
+    if (response.ok) {
+      alert('Job saved successfully!');
     } else {
-      console.warn("No job matches found in response");
+      const errorData = await response.json();
+      console.error('Failed to save job:', errorData);
+      alert('Failed to save job');
     }
-  } catch (err) {
-    console.error("Error during job search:", err.message);
-    setError(err.message);
-  } finally {
-    setLoading(false);
-    console.log("Job search completed");
+  } catch (error) {
+    console.error('Error saving job:', error);
+    alert('Error saving job');
   }
 };
-
-
-  // Upload Resume Component
-  const UploadResume = () => (
-    <div className="space-y-4">
-      <div
-        className="border-2 border-dashed rounded-lg p-8 text-center"
-        onDrop={(e) => {
-          e.preventDefault();
-          handleFileUpload(Array.from(e.dataTransfer.files));
-        }}
-        onDragOver={(e) => e.preventDefault()}
-      >
-        <input
-          type="file"
-          onChange={(e) => handleFileUpload(Array.from(e.target.files))}
-          className="hidden"
-          id="file-upload"
-          accept=".pdf,.doc,.docx"
-        />
-        <label
-          htmlFor="file-upload"
-          className="cursor-pointer text-indigo-600 hover:text-indigo-500"
-        >
-          Upload Resume
-        </label>
-        <p className="mt-2 text-sm text-gray-500">
-          {files.length > 0 
-            ? `Selected: ${files.map(f => f.name).join(', ')}`
-            : 'Drag and drop your resume here or click to browse'}
-        </p>
-
-      </div>
-      
-      <Button
-        onClick={handleFileUpload}
-        className="w-full bg-indigo-500 text-white"
-        disabled={files.length === 0}
-      >
-       Upload and Search Jobs
-      </Button>
-    </div>
-  );
 
   // Filter Form Component
   const FilterForm = () => {
@@ -171,26 +149,6 @@ const handleJobSearch = async (filterData = {}) => {
     };
 
 
-    const handleSaveJob = async (job) => {
-      try {
-        const response = await fetch('/jobs/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(job),
-        });
-    
-        if (response.ok) {
-          alert('Job saved successfully!');
-        } else {
-          console.error('Failed to save job');
-        }
-      } catch (error) {
-        console.error('Error saving job:', error);
-      }
-    };
-    
 
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -288,11 +246,11 @@ const JobCard = ({ job, onSave }) => (
 
   {/* Save Button with Icon */}
   <button
-    onClick={() => onSave(job)}
-    className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
-  >
-    <BookmarkPlus className="w-6 h-6" />
-  </button>
+      onClick={() => onSave(job)}
+      className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
+    >
+      <BookmarkPlus className="w-6 h-6" />
+    </button>
 </div>
 
     </CardContent>
@@ -308,7 +266,8 @@ const JobCard = ({ job, onSave }) => (
       {/* Main Content Area */}
       <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
-          <Card className="shadow-lg">
+          {/* <Card className="shadow-lg"> */}
+          <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
             <CardContent className="p-4 lg:p-6">
               <h1 className="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 text-center">
                 Find Your Next Job
@@ -363,8 +322,13 @@ const JobCard = ({ job, onSave }) => (
                     Found {jobMatches.length} matching positions
                   </h2>
                   {jobMatches.map((job, index) => (
-                    <JobCard key={index} job={job} className="w-full" />
-                  ))}
+                  <JobCard 
+                    key={index} 
+                    job={job} 
+                    onSave={handleSaveJob}
+                    className="w-full" 
+                  />
+                ))}
                 </div>
               )}
             </CardContent>
