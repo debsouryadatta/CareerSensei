@@ -37,10 +37,12 @@ const Dashboard = () => {
     }
   };
 
+  
+  // Function to fetch saved cover letters
   const fetchSavedCoverLetters = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/cover-letters/${userId}`);
+      const response = await fetch(`http://localhost:8000/api/v1/cover_letter/${userId}`);
       if (!response.ok) throw new Error("Failed to fetch saved cover letters");
       const data = await response.json();
       setSavedCoverLetters(data.cover_letters || []);
@@ -51,6 +53,7 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
@@ -73,12 +76,12 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold mb-4">Saved Jobs</h2>
             {savedJobs.length > 0 ? (
               savedJobs.map((job) => (
-                <Card key={job.id} className="mb-4">
+                <Card key={job.id} className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4 pt-4">
                   <CardContent>
                     <h3 className="font-bold text-lg">{job.job_title}</h3>
                     <p>{job.company}</p>
                     <p>{job.location}</p>
-                    <p className="text-sm text-gray-500">{job.job_description}</p>
+                    <p className="text-sm text-gray-400">{job.job_description}</p>
                     <a
                       href={job.application_link}
                       target="_blank"
@@ -94,15 +97,15 @@ const Dashboard = () => {
               <p className="text-gray-500">No saved jobs found.</p>
             )}
           </section>
-
-          {/* Saved Cover Letters Section */}
-          <section>
+        {/* Saved Cover Letters Section */}
+        <section>
             <h2 className="text-xl font-semibold mb-4">Saved Cover Letters</h2>
             {savedCoverLetters.length > 0 ? (
               savedCoverLetters.map((coverLetter) => (
-                <Card key={coverLetter.id} className="mb-4">
+                <Card key={coverLetter.id}  className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4 pt-4">
                   <CardContent>
-                    <p className="text-sm text-gray-700">{coverLetter.cover_letter}</p>
+                    <h3 className="font-bold text-lg">Cover Letter #{coverLetter.id}</h3>
+                    <p className="text-sm text-gray-400">{coverLetter.cover_letter}</p>
                   </CardContent>
                 </Card>
               ))
