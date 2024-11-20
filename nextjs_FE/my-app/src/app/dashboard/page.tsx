@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
+  const userId = localStorage.getItem("user_id"); // Retrieve user ID from local storage
 
   useEffect(() => {
     if (userId) {

@@ -97,7 +97,7 @@ const UploadResume = () => (
 );
 
 const handleSaveJob = async (job) => {
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('user_id');
   console.log('userId:', userId);
 
   if (!userId) {
