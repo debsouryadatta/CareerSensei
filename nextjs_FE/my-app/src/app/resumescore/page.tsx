@@ -92,7 +92,8 @@ const ResumeScore = () => {
       <SidebarComponent />
       <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
-          <Card className="w-full max-w-4xl mx-auto">
+          {/* <Card className="w-full max-w-4xl mx-auto"> */}
+          <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
             <CardContent className="p-6">
               <h1 className="text-3xl font-bold text-center mb-8">Resume Score Analyzer</h1>
 
@@ -134,7 +135,15 @@ const ResumeScore = () => {
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 font-medium"
                 disabled={loading || !file}
               >
-                {loading ? "Analyzing..." : "Analyze Resume"}
+                {/* {loading ? "Analyzing..." : "Analyze Resume"} */}
+                {loading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-current border-r-transparent rounded-full animate-spin" />
+                Analyzing Resume...
+              </div>
+            ) : (
+              <span>Analyze Resume</span>
+            )}
               </Button>
 
               {/* Error Message */}
