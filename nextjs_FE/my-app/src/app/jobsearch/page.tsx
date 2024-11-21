@@ -214,25 +214,30 @@ const handleSaveJob = async (job) => {
             placeholder="Job Title"
             value={filters.job_title}
             onChange={(e) => setFilters({...filters, job_title: e.target.value})}
+            className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Location"
             value={filters.location}
             onChange={(e) => setFilters({...filters, location: e.target.value})}
+            className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Experience"
             value={filters.required_experience}
             onChange={(e) => setFilters({...filters, required_experience: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Company"
             value={filters.company}
             onChange={(e) => setFilters({...filters, company: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
+            
           />
           <Input 
             placeholder="Technologies (separate with commas)"
-            className="col-span-full"
+            className="col-span-full rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
             value={filters.technologies}
             onChange={(e) => setFilters({...filters, technologies: e.target.value})}
           />
@@ -304,7 +309,7 @@ const JobCard = ({ job, onSave }) => (
   {/* Save Button with Icon */}
   <button
       onClick={() => onSave(job)}
-      className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
+      className="text-indigo-600 hover:text-indigo-500  rounded-lg p-2 transition-colors"
     >
       <BookmarkPlus className="w-6 h-6" />
     </button>
