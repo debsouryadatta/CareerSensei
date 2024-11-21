@@ -6,13 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import Badge from "@/components/ui/badge";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { MapPin, Building2, Clock, Coins, ExternalLink } from 'lucide-react';
-import { IconBrandTabler, IconSettings, IconUserBolt, IconArrowLeft } from '@tabler/icons-react';
-import Link from "next/link";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Bookmark, BookmarkPlus } from 'lucide-react';
+import { BookmarkPlus } from 'lucide-react';
 import SidebarComponent from '@/components/Sidebar';
 
 
