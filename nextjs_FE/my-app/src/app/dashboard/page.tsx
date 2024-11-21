@@ -61,7 +61,7 @@ const Dashboard = () => {
       <SidebarComponent />
 
       {/* Main Content */}
-      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-900 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
@@ -76,7 +76,8 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold mb-4">Saved Jobs</h2>
             {savedJobs.length > 0 ? (
               savedJobs.map((job) => (
-                <Card key={job.id} className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4 pt-4">
+                <Card key={job.id} className="w-full max-w-4xl mx-auto dark:bg-neutral-800 
+            border dark:border-neutral-700 overflow-hidden mb-4 pt-4">
                   <CardContent>
                     <h3 className="font-bold text-lg">{job.job_title}</h3>
                     <p>{job.company}</p>
@@ -102,7 +103,8 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold mb-4">Saved Cover Letters</h2>
             {savedCoverLetters.length > 0 ? (
               savedCoverLetters.map((coverLetter) => (
-                <Card key={coverLetter.id}  className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] mb-4 pt-4">
+                <Card key={coverLetter.id}  className="w-full max-w-4xl mx-auto dark:bg-neutral-800 
+            border dark:border-neutral-700 overflow-hidden mb-4 pt-4">
                   <CardContent>
                     <h3 className="font-bold text-lg">Cover Letter #{coverLetter.id}</h3>
                     <p className="text-sm text-gray-400">{coverLetter.cover_letter}</p>

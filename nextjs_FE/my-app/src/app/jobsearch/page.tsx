@@ -326,10 +326,12 @@ const JobCard = ({ job, onSave }) => (
       <SidebarComponent />
       
       {/* Main Content Area */}
-      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-900 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           {/* <Card className="shadow-lg"> */}
-          <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+          {/* <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]"> */}
+          <Card className="w-full shadow-lg dark:bg-neutral-800 
+            border dark:border-neutral-700 overflow-hidden">
             <CardContent className="p-4 lg:p-6">
               <h1 className="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 text-center">
                 Find Your Next Job
