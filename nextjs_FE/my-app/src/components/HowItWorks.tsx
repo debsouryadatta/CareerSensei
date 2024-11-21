@@ -51,7 +51,7 @@ const HowItWorks = () => {
 
   return (
     <>
-      <section className="py-12 bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800">
+      <section className="py-12 bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800 ">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
@@ -63,7 +63,7 @@ const HowItWorks = () => {
           </div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 "
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -73,7 +73,7 @@ const HowItWorks = () => {
                 key={index}
                 variants={cardVariants}
                 whileHover={{ scale: 1.05 }}
-                className="bg-white dark:bg-black dark:hover:shadow-lg dark:hover:shadow-purple-500/[0.1] dark:border-white/[0.1] border-black/[0.1] border rounded-lg p-6 transition-shadow duration-300 ease-in-out"
+                className="max-w-md mx-auto bg-white dark:bg-black dark:hover:shadow-lg dark:hover:shadow-purple-500/[0.1] dark:border-white/[0.1] border-black/[0.1] border rounded-lg p-6 transition-shadow duration-300 ease-in-out"
               >
                 <div className="flex items-center mb-4">
                   <div className="rounded-full p-2 bg-gray-50 dark:bg-neutral-900">
