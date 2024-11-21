@@ -47,8 +47,8 @@ const TabsList = React.forwardRef<
     ref={ref}
     className={cn(
       "inline-flex h-10 items-center justify-center rounded-lg p-1",
-      "bg-gray-200 border border-gray-300", // Added border and color
-      "text-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600", // Dark mode adjustments
+      "bg-gray-200 ", // Added border and color
+      "text-gray-600 dark:bg-neutral-700 dark:text-gray-200 dark:border-gray-600", // Dark mode adjustments
       className
     )}
     {...props}
@@ -91,3 +91,4 @@ const TabsContent = React.forwardRef<
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
 export { Tabs, TabsList, TabsTrigger, TabsContent }
+

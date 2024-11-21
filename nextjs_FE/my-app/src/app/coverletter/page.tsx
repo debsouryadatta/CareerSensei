@@ -56,7 +56,7 @@ const GenerateCoverLetter = () => {
         console.log(pair[0], pair[1]);
       }
 
-      const response = await fetch("http://localhost:8000/api/v1/cover_letter/create", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cover_letter/create`, {
         method: "POST",
         body: formData,
       });
@@ -108,7 +108,7 @@ const GenerateCoverLetter = () => {
     setError("");
   
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/cover_letter/save/${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cover_letter/save/${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
