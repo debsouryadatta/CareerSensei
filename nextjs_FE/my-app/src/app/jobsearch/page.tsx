@@ -31,6 +31,9 @@ const handleFileUpload = async (newFiles: File[]) => {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       body: formData,
     });
 
@@ -103,7 +106,8 @@ const handleJobSearch = async (filterData = {}) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/filters/job_search`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(filterData),
     });
@@ -144,7 +148,8 @@ const handleSaveJob = async (job) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/jobs/save/${userId}`, { // Updated URL
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(job),
     });

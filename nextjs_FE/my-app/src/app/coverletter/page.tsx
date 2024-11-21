@@ -58,6 +58,9 @@ const GenerateCoverLetter = () => {
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cover_letter/create`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
         body: formData,
       });
 
@@ -112,6 +115,7 @@ const GenerateCoverLetter = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({
           cover_letter: coverLetter,
