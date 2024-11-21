@@ -34,7 +34,7 @@ const handleFileUpload = async (newFiles: File[]) => {
     setLoading(true);
     setError(null);
 
-    const response = await fetch('http://localhost:8000/api/v1/resume/upload', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`, {
       method: 'POST',
       body: formData,
     });
@@ -96,6 +96,46 @@ const UploadResume = () => (
   </div>
 );
 
+
+// Handle job search
+const handleJobSearch = async (filterData = {}) => {
+  console.log("Starting job search with filter data:", filterData);
+  
+  try {
+    setLoading(true);
+    setError(null);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/filters/job_search`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(filterData),
+    });
+
+    console.log("Response status:", response.status);
+    if (!response.ok) {
+      console.error("Job search failed:", response.statusText);
+      throw new Error('Job search failed');
+    }
+    const data = await response.json();
+    console.log("Received data from server:", data);
+    if (data.job_matches && data.job_matches.matches) {
+      setJobMatches(data.job_matches.matches);
+      console.log("Job matches found:", data.job_matches.matches);
+    } else {
+      console.warn("No job matches found in response");
+    }
+  } catch (err) {
+    console.error("Error during job search:", err.message);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+    console.log("Job search completed");
+  }
+};
+
+
 const handleSaveJob = async (job) => {
   const userId = localStorage.getItem('user_id');
   console.log('userId:', userId);
@@ -106,7 +146,7 @@ const handleSaveJob = async (job) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8000/api/v1/jobs/save/${userId}`, { // Updated URL
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/jobs/save/${userId}`, { // Updated URL
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -190,12 +230,12 @@ const handleSaveJob = async (job) => {
 
   // Job Card Component
 const JobCard = ({ job, onSave }) => (
-  <Card className="mb-4 hover:shadow-lg transition-shadow">
+  <Card className="mb-4 bg-neutral-800 text-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow">
     <CardContent className="p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-semibold mb-2">{job.job_title}</h3>
-          <div className="flex items-center space-x-2 text-gray-600">
+          <div className="flex items-center space-x-2 text-gray-400">
             <Building2 className="w-4 h-4" />
             <span>{job.company}</span>
           </div>
@@ -204,15 +244,15 @@ const JobCard = ({ job, onSave }) => (
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="flex items-center space-x-2 text-gray-600">
+        <div className="flex items-center space-x-2 text-gray-400">
           <MapPin className="w-4 h-4" />
           <span>{job.location}</span>
         </div>
-        <div className="flex items-center space-x-2 text-gray-600">
+        <div className="flex items-center space-x-2 text-gray-400">
           <Clock className="w-4 h-4" />
           <span>{job.required_experience}</span>
         </div>
-        <div className="flex items-center space-x-2 text-gray-600">
+        <div className="flex items-center space-x-2 text-gray-400">
           <Coins className="w-4 h-4" />
           <span>{job.salary_range}</span>
         </div>
@@ -227,7 +267,7 @@ const JobCard = ({ job, onSave }) => (
         </div>
       </div>
 
-      <p className="text-gray-600 mb-4">{job.job_description}</p>
+      <p className="text-gray-400 mb-4">{job.job_description}</p>
 
       {/* Apply Now and Save Button */}
   

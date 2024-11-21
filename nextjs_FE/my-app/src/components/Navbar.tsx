@@ -24,7 +24,7 @@ export const Navbar = () => {
             href="/" 
             className="relative z-20 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500"
           >
-            JobFinder
+            CareerSensei
           </Link>
         </div>
         
