@@ -12,84 +12,106 @@ import SidebarComponent from '@/components/Sidebar';
 
 
 const JobSearch = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [jobMatches, setJobMatches] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
 
-const handleFileUpload = async (newFiles: File[]) => {
-  setFiles(newFiles);
-  const formData = new FormData();
-  formData.append('file', newFiles[0]);
-  formData.append('file_type', newFiles[0].type === 'application/pdf' ? 'pdf' : 'image');
 
-  try {
-    setLoading(true);
-    setError(null);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Resume upload failed');
+  const handleFileUpload = async () => {
+    if (files.length === 0) {
+      setError("Please upload a file before searching.");
+      return;
     }
 
-    const data: ResumeUploadResponse = await response.json();
-    
-    if (data.success && data.data.job_matches.matches) {
-      setJobMatches(data.data.job_matches.matches);
+    const formData = new FormData();
+    const fileType =
+      files[0].type === "application/pdf"
+        ? "pdf"
+        : files[0].type.startsWith("image/")
+        ? "image"
+        : null;
+
+    if (!fileType) {
+      setError("Invalid file type. Please upload a PDF or image file.");
+      return;
     }
 
-  } catch (err) {
-    setError(err instanceof Error ? err.message : 'An unknown error occurred');
-  } finally {
-    setLoading(false);
-  }
-};
+    formData.append("file", files[0]);
+    formData.append("file_type", fileType);
 
-const UploadResume = () => (
-  <div className="space-y-4">
-    <div
-      className="border-2 border-dashed rounded-lg p-8 text-center"
-      onDrop={(e) => {
-        e.preventDefault();
-        handleFileUpload(Array.from(e.dataTransfer.files));
-      }}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      <input
-        type="file"
-        onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
-        className="hidden"
-        id="file-upload"
-        accept=".pdf,.doc,.docx"
-      />
-      <label
-        htmlFor="file-upload"
-        className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Resume upload failed.");
+      }
+
+      const data = await response.json();
+      if (data.success && data.data.job_matches.matches) {
+        setJobMatches(data.data.job_matches.matches);
+      } else {
+        setError("No matching jobs found.");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred while searching.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const UploadResume = () => (
+    <div className="space-y-4">
+      <div
+        className="border-2 border-dashed rounded-lg p-8 text-center"
+        onDrop={(e) => {
+          e.preventDefault();
+          setFiles(Array.from(e.dataTransfer.files));
+        }}
+        onDragOver={(e) => e.preventDefault()}
       >
-        Upload Resume
-      </label>
-      <p className="mt-2 text-sm text-gray-500">
-        {files.length > 0 
-          ? `Selected: ${files.map(f => f.name).join(', ')}`
-          : 'Drag and drop your resume here or click to browse'}
-      </p>
+        <input
+          type="file"
+          onChange={(e) => setFiles(Array.from(e.target.files || []))}
+          className="hidden"
+          id="file-upload"
+          accept=".pdf,.png,.jpg,.jpeg"
+        />
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+        >
+          Upload Resume
+        </label>
+        <p className="mt-2 text-sm text-gray-500">
+          {files.length > 0
+            ? `Selected: ${files.map((f) => f.name).join(", ")}`
+            : "Drag and drop your resume here or click to browse"}
+        </p>
+      </div>
+
+      <Button
+        onClick={handleFileUpload}
+        className="w-full bg-indigo-500 text-white"
+        disabled={files.length === 0 || loading}
+      >
+        {loading ? "Analyzing Resume..." : "Search Jobs"}
+      </Button>
     </div>
-    
-    <Button
-      onClick={() => handleFileUpload(files)}
-      className="w-full bg-indigo-500 text-white"
-      disabled={files.length === 0}
-    >
-     Upload and Search Jobs
-    </Button>
-  </div>
-);
+  );
 
 
 // Handle job search
