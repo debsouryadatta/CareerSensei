@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Link from 'next/link';
 import { Sidebar, SidebarBody, SidebarLink } from '@/components/ui/sidebar';
 import { IconBrandTabler, IconSettings, IconUserBolt, IconArrowLeft } from '@tabler/icons-react';
@@ -48,6 +48,13 @@ const LogoIcon = () => (
 
 const SidebarComponent = () => {
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState(""); // State for the user's name
+
+  useEffect(() => {
+    
+    const name = localStorage.getItem("name");
+    setUserName(name || ""); 
+  }, []);
 
   return (
     <Sidebar 
@@ -69,7 +76,7 @@ const SidebarComponent = () => {
         <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
           <SidebarLink
             link={{
-              label: "Sonika",
+              label: userName || "User", 
               href: "#",
             
               icon: (
