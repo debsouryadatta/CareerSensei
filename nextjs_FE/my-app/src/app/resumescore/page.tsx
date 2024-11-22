@@ -11,6 +11,7 @@ import { CheckCircle2 } from "lucide-react";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
 import { useAuth0 } from "@auth0/auth0-react";
+import { PageLoader } from "@/components/PageLoader";
 
 const ResumeScore = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -22,12 +23,16 @@ const ResumeScore = () => {
   const [advice, setAdvice] = useState<string[]>([]);
   const router = useRouter();
 
-  const { isAuthenticated } = useAuth0()
+  const { isAuthenticated, isLoading } = useAuth0();
   useEffect(() => {
-    if(!isAuthenticated){
-      router.replace('/')
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/');
     }
-  },[])
+  }, [isAuthenticated, isLoading, router]);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   const handleFileUpload = (selectedFiles: File[]) => {
     const selectedFile = selectedFiles[0];

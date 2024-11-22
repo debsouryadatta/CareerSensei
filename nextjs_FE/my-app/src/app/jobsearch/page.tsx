@@ -12,6 +12,7 @@ import SidebarComponent from '@/components/Sidebar';
 import { Upload } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useAuth0 } from '@auth0/auth0-react';
+import { PageLoader } from '@/components/PageLoader';
 
 
 const JobSearch = () => {
@@ -23,14 +24,17 @@ const JobSearch = () => {
   const [tab, setTab] = useState("resume");
   const router = useRouter();
 
-  const { isAuthenticated } = useAuth0()
+  const { isAuthenticated, isLoading } = useAuth0();
+
   useEffect(() => {
-    if(!isAuthenticated){
-      router.replace('/')
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/');
     }
-  },[])
+  }, [isAuthenticated, isLoading, router]);
 
-
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   const handleFileUpload = async () => {
     if (files.length === 0) {

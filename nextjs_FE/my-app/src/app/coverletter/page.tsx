@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Upload, BookmarkPlus , ClipboardCopy} from 'lucide-react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
+import { PageLoader } from "@/components/PageLoader";
 
 const GenerateCoverLetter = () => {
   const [jobDescription, setJobDescription] = useState("");
@@ -23,12 +24,17 @@ const GenerateCoverLetter = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const router = useRouter();
 
-  const { isAuthenticated } = useAuth0()
+  const { isAuthenticated, isLoading } = useAuth0();
+
   useEffect(() => {
-    if(!isAuthenticated){
-      router.replace('/')
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/');
     }
-  },[])
+  }, [isAuthenticated, isLoading, router]);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   async function handleGenerateCoverLetter() {
     try {

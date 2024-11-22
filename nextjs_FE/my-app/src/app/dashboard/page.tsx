@@ -19,31 +19,33 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
+import { PageLoader } from "@/components/PageLoader";
 
 const Dashboard = () => {
   const [savedJobs, setSavedJobs] = useState([]);
   const [savedCoverLetters, setSavedCoverLetters] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [expandedItems, setExpandedItems] = useState({});
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
-  const { isAuthenticated } = useAuth0()
+  const { isAuthenticated, isLoading } = useAuth0()
+
   useEffect(() => {
-    if(!isAuthenticated){
+    if(!isLoading && !isAuthenticated){
       router.replace('/')
     }
     const id = window.localStorage.getItem("user_id");
     setUserId(id);
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isLoading, router]);
 
   useEffect(() => {
     if (userId) {
       fetchSavedJobs();
       fetchSavedCoverLetters();
     } else {
-      setError("User not logged in. Please log in to view your dashboard.");
+      // setError("User not logged in. Please log in to view your dashboard.");
     }
   }, [userId]);
 
@@ -88,6 +90,10 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   const deleteItem = async (id, type) => {
     try {

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Navbar } from "@/components/Navbar";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import HowItWorks from "@/components/HowItWorks";
@@ -11,12 +10,13 @@ import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth0()
+  const { isAuthenticated, isLoading } = useAuth0()
+
   useEffect(() => {
-    if(isAuthenticated){
+    if(!isLoading && isAuthenticated){
       router.replace('/dashboard');
     }
-  },[])
+  },[isAuthenticated, isLoading, router])
 
   return (
     <>
