@@ -9,6 +9,7 @@ import Badge from "@/components/ui/badge";
 import { MapPin, Building2, Clock, Coins, ExternalLink } from 'lucide-react';
 import { BookmarkPlus } from 'lucide-react';
 import SidebarComponent from '@/components/Sidebar';
+import { Upload } from "lucide-react";
 
 
 const JobSearch = () => {
@@ -95,9 +96,12 @@ const JobSearch = () => {
         />
         <label
           htmlFor="file-upload"
-          className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+          className="cursor-pointer"
         >
-          Upload Resume
+          <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <span className="text-indigo-600 hover:text-indigo-500">
+                      Upload Resume
+                    </span>
         </label>
         <p className="mt-2 text-sm text-gray-500">
           {files.length > 0
