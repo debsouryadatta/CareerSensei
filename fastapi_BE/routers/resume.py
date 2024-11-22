@@ -4,13 +4,15 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from typing import Literal
 
+from auth.auth import validate_token
 from utils.resume_score import process_resume_score
 from utils.resume_jobs import process_resume
 
 resume_router = APIRouter(
     prefix="/resume",
     tags=["resume"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(validate_token)]
 )
 
 
