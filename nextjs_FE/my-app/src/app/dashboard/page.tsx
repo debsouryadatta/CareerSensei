@@ -26,6 +26,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expandedItems, setExpandedItems] = useState({});
+  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
   const { isAuthenticated } = useAuth0()
@@ -33,9 +34,9 @@ const Dashboard = () => {
     if(!isAuthenticated){
       router.replace('/')
     }
-  },[])
-
-  const userId = localStorage.getItem("user_id");
+    const id = window.localStorage.getItem("user_id");
+    setUserId(id);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (userId) {
@@ -256,4 +257,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
