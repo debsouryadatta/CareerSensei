@@ -12,87 +12,106 @@ import SidebarComponent from '@/components/Sidebar';
 
 
 const JobSearch = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [jobMatches, setJobMatches] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
 
-const handleFileUpload = async (newFiles: File[]) => {
-  setFiles(newFiles);
-  const formData = new FormData();
-  formData.append('file', newFiles[0]);
-  formData.append('file_type', newFiles[0].type === 'application/pdf' ? 'pdf' : 'image');
 
-  try {
-    setLoading(true);
-    setError(null);
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Resume upload failed');
+  const handleFileUpload = async () => {
+    if (files.length === 0) {
+      setError("Please upload a file before searching.");
+      return;
     }
 
-    const data: ResumeUploadResponse = await response.json();
-    
-    if (data.success && data.data.job_matches.matches) {
-      setJobMatches(data.data.job_matches.matches);
+    const formData = new FormData();
+    const fileType =
+      files[0].type === "application/pdf"
+        ? "pdf"
+        : files[0].type.startsWith("image/")
+        ? "image"
+        : null;
+
+    if (!fileType) {
+      setError("Invalid file type. Please upload a PDF or image file.");
+      return;
     }
 
-  } catch (err) {
-    setError(err instanceof Error ? err.message : 'An unknown error occurred');
-  } finally {
-    setLoading(false);
-  }
-};
+    formData.append("file", files[0]);
+    formData.append("file_type", fileType);
 
-const UploadResume = () => (
-  <div className="space-y-4">
-    <div
-      className="border-2 border-dashed rounded-lg p-8 text-center"
-      onDrop={(e) => {
-        e.preventDefault();
-        handleFileUpload(Array.from(e.dataTransfer.files));
-      }}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      <input
-        type="file"
-        onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
-        className="hidden"
-        id="file-upload"
-        accept=".pdf,.doc,.docx"
-      />
-      <label
-        htmlFor="file-upload"
-        className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Resume upload failed.");
+      }
+
+      const data = await response.json();
+      if (data.success && data.data.job_matches.matches) {
+        setJobMatches(data.data.job_matches.matches);
+      } else {
+        setError("No matching jobs found.");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred while searching.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const UploadResume = () => (
+    <div className="space-y-4">
+      <div
+        className="border-2 border-dashed rounded-lg p-8 text-center"
+        onDrop={(e) => {
+          e.preventDefault();
+          setFiles(Array.from(e.dataTransfer.files));
+        }}
+        onDragOver={(e) => e.preventDefault()}
       >
-        Upload Resume
-      </label>
-      <p className="mt-2 text-sm text-gray-500">
-        {files.length > 0 
-          ? `Selected: ${files.map(f => f.name).join(', ')}`
-          : 'Drag and drop your resume here or click to browse'}
-      </p>
+        <input
+          type="file"
+          onChange={(e) => setFiles(Array.from(e.target.files || []))}
+          className="hidden"
+          id="file-upload"
+          accept=".pdf,.png,.jpg,.jpeg"
+        />
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer text-indigo-600 hover:text-indigo-500"
+        >
+          Upload Resume
+        </label>
+        <p className="mt-2 text-sm text-gray-500">
+          {files.length > 0
+            ? `Selected: ${files.map((f) => f.name).join(", ")}`
+            : "Drag and drop your resume here or click to browse"}
+        </p>
+      </div>
+
+      <Button
+        onClick={handleFileUpload}
+        className="w-full bg-indigo-500 text-white"
+        disabled={files.length === 0 || loading}
+      >
+        {loading ? "Analyzing Resume..." : "Search Jobs"}
+      </Button>
     </div>
-    
-    <Button
-      onClick={() => handleFileUpload(files)}
-      className="w-full bg-indigo-500 text-white"
-      disabled={files.length === 0}
-    >
-     Upload and Search Jobs
-    </Button>
-  </div>
-);
+  );
 
 
 // Handle job search
@@ -106,8 +125,7 @@ const handleJobSearch = async (filterData = {}) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/filters/job_search`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(filterData),
     });
@@ -148,8 +166,7 @@ const handleSaveJob = async (job) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/jobs/save/${userId}`, { // Updated URL
       method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(job),
     });
@@ -197,25 +214,30 @@ const handleSaveJob = async (job) => {
             placeholder="Job Title"
             value={filters.job_title}
             onChange={(e) => setFilters({...filters, job_title: e.target.value})}
+            className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Location"
             value={filters.location}
             onChange={(e) => setFilters({...filters, location: e.target.value})}
+            className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Experience"
             value={filters.required_experience}
             onChange={(e) => setFilters({...filters, required_experience: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
           />
           <Input 
             placeholder="Company"
             value={filters.company}
             onChange={(e) => setFilters({...filters, company: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
+            
           />
           <Input 
             placeholder="Technologies (separate with commas)"
-            className="col-span-full"
+            className="col-span-full rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
             value={filters.technologies}
             onChange={(e) => setFilters({...filters, technologies: e.target.value})}
           />
@@ -287,7 +309,7 @@ const JobCard = ({ job, onSave }) => (
   {/* Save Button with Icon */}
   <button
       onClick={() => onSave(job)}
-      className="text-indigo-600 hover:text-indigo-500 bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition-colors"
+      className="text-indigo-600 hover:text-indigo-500  rounded-lg p-2 transition-colors"
     >
       <BookmarkPlus className="w-6 h-6" />
     </button>
@@ -304,10 +326,12 @@ const JobCard = ({ job, onSave }) => (
       <SidebarComponent />
       
       {/* Main Content Area */}
-      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-900 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           {/* <Card className="shadow-lg"> */}
-          <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+          {/* <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]"> */}
+          <Card className="w-full shadow-lg dark:bg-neutral-800 
+            border dark:border-neutral-700 overflow-hidden">
             <CardContent className="p-4 lg:p-6">
               <h1 className="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 text-center">
                 Find Your Next Job

@@ -88,15 +88,22 @@ const ResumeScore = () => {
       setLoading(false);
     }
   };
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
+  };
   
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <SidebarComponent />
-      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-800 overflow-y-auto">
+      <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-900 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           {/* <Card className="w-full max-w-4xl mx-auto"> */}
-          <Card className="w-full max-w-4xl mx-auto dark:backdrop-blur-xl dark:bg-black/10 border dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+          <Card className="w-full shadow-lg dark:bg-neutral-800 
+            border dark:border-neutral-700 overflow-hidden">
             <CardContent className="p-6">
               <h1 className="text-3xl font-bold text-center mb-8">Resume Score Analyzer</h1>
 
@@ -154,7 +161,7 @@ const ResumeScore = () => {
 
               {/* Display Results */}
               {score !== null && (
-                <div className="space-y-8 animate-in fade-in-50 duration-500">
+                <div className="space-y-8 animate-in fade-in-50 duration-500 mt-6">
                   {/* Score Display */}
                   <div className="text-center space-y-4">
                     <h3 className="text-2xl font-semibold">Your Resume Score</h3>
@@ -163,7 +170,7 @@ const ResumeScore = () => {
                         <span className="text-4xl font-bold">{score}</span>
                         
                       </div>
-                      <svg className="w-full h-full transform -rotate-90">
+                      {/* <svg className="w-full h-full transform -rotate-90">
                     <circle
                       className="text-primary/20"
                       strokeWidth="8"
@@ -185,7 +192,30 @@ const ResumeScore = () => {
                       cx="80"
                       cy="80"
                     />
-                  </svg>
+                  </svg> */}
+
+<svg viewBox="0 0 180 180" className="absolute inset-0">
+                        <circle
+                          cx="90"
+                          cy="90"
+                          r="80"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="20"
+                          className="text-gray-200 dark:text-neutral-700"
+                        />
+                        <circle
+                          cx="90"
+                          cy="90"
+                          r="80"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="20"
+                          strokeDasharray="502.65"
+                          strokeDashoffset={502.65 * (1 - score / 100)}
+                          className={`${getScoreColor(score)} transition-all duration-1000`}
+                        />
+                      </svg>
                     </div>
                   </div>
 
