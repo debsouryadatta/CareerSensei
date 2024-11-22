@@ -63,3 +63,4 @@ CareerSensei is just the beginning of a smarter, more efficient job search journ
 - Live Link: [https://careersensei.vercel.app/](https://careersensei.vercel.app/)
 - GitHub Repo: [https://github.com/debsouryadatta/CareerSensei](https://github.com/debsouryadatta/CareerSensei)
 - Project Demo Link(Youtube): [https://youtu.be/mHWMD5tq7ts?si=tvokqOVo3SGKhP4v](https://youtu.be/mHWMD5tq7ts?si=tvokqOVo3SGKhP4v)
+- Devpost Link: [https://devpost.com/software/careersensei](https://devpost.com/software/careersensei)
