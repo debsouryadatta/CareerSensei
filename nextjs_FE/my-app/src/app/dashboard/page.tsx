@@ -84,6 +84,10 @@ const Dashboard = () => {
       const endpoint = type === "job" ? `/api/v1/jobs/${id}` : `/api/v1/cover_letter/${id}`;
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       if (!response.ok) throw new Error("Failed to delete item");
 
