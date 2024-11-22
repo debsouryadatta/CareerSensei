@@ -14,9 +14,7 @@ const links = [
   { label: "Search Jobs", href: "/jobsearch", icon: <Search className="h-5 w-5" /> },
   { label: "Generate Cover Letter", href: "/coverletter", icon: <FileText className="h-5 w-5" /> },
   { label: "Resume Score", href: "/resumescore", icon: <BarChart2 className="h-5 w-5" /> },
-  { label: "Profile", href: "/profile", icon: <IconUserBolt className="h-5 w-5" /> },
-  { label: "Settings", href: "/settings", icon: <IconSettings className="h-5 w-5" /> },
-  { label: "Logout", href: "/logout", icon: <IconArrowLeft className="h-5 w-5" /> },
+  { label: "Logout", href: "/", icon: <IconArrowLeft className="h-5 w-5" /> },
 ];
 
 const Logo = () => (
