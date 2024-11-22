@@ -39,7 +39,13 @@ const Dashboard = () => {
   const fetchSavedJobs = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/jobs/${userId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/jobs/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch saved jobs");
       const data = await response.json();
       setSavedJobs(data.jobs || []);
@@ -54,7 +60,13 @@ const Dashboard = () => {
   const fetchSavedCoverLetters = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cover_letter/${userId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cover_letter/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch saved cover letters");
       const data = await response.json();
       setSavedCoverLetters(data.cover_letters || []);

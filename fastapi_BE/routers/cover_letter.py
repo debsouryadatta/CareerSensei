@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from typing import Literal, Optional
 from db.db import get_session
+from auth.auth import validate_token
 from models.models import CoverLetterCreate, CoverLetters
 from utils.cover_letter import process_cover_letter
 
@@ -10,6 +11,7 @@ cover_letter_router = APIRouter(
     prefix="/cover_letter",
     tags=["Cover Letter"],
     responses={404: {"description": "Not found"}},
+    dependencies=[Depends(validate_token)]
 )
 
 @cover_letter_router.post("/create")

@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_description: str = "Backend server for the dashboard app built on fastapi"
 
     host: str = "0.0.0.0"
-    port: int = 8000
+    port: int = 7000
 
     database_url: str
     sambanova_api_key: str

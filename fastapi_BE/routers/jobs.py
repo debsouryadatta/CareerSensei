@@ -2,13 +2,15 @@ import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from db.db import get_session
+from auth.auth import validate_token
 from models.models import JobCreate, Jobs
 
 
 jobs_router = APIRouter(
     prefix="/jobs",
     tags=["jobs"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(validate_token)]
 )
 
 @jobs_router.post("/save/{user_id}")
