@@ -321,7 +321,7 @@ const JobCard = ({ job, onSave }) => (
   );
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col md:flex-row  h-screen">
       {/* Sidebar Section */}
       <SidebarComponent />
       
