@@ -1,52 +1,60 @@
-// app/auth/signup/page.tsx
+// app/auth/signin/page.tsx
 "use client";
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { useRouter } from 'next/navigation';
+import { useAuth0 } from "@auth0/auth0-react";
 
-export default function SignUp() {
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter(); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Add your signup logic here
-    setLoading(false);
+    
+    try {
+      // Add your authentication logic here
+      
+      // After successful authentication, redirect to JobSearch page
+      router.push('/jobsearch'); 
+    } catch (error) {
+      console.error('Authentication error:', error);
+      // Handle error appropriately
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const { loginWithRedirect } = useAuth0();
+  const handleGoogleSignIn = async () => {
+    await loginWithRedirect({
+      authorizationParams: {
+        prompt: "login",
+      },
+    });
+  }
+
 
   return (
     <BackgroundBeams>
-    <div className="w-full max-w-md flex flex-col items-center justify-center  px-4">
+    <div className="w-full max-w-md  flex flex-col items-center justify-center px-4">
     <h2 className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
-            Create Account
+            Welcome Back
           </h2>
+          
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-4xl"
       >
         <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8">
-         
-          
+        
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-600 focus:ring-2 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-white"
-                placeholder="Enter your name"
-                required
-              />
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-2">
                 Email Address
@@ -70,7 +78,7 @@ export default function SignUp() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-600 focus:ring-2 focus:ring-indigo-500 dark:bg-neutral-700 dark:text-white"
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 required
               />
             </div>
@@ -80,7 +88,7 @@ export default function SignUp() {
               disabled={loading}
               className="w-full py-3 rounded-lg bg-indigo-500 text-white font-medium hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Creating account..." : "Sign Up"}
+              {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
           
@@ -97,7 +105,7 @@ export default function SignUp() {
             </div>
             
             <button
-              onClick={() => {/* Add Google OAuth logic */}}
+              onClick={handleGoogleSignIn}
               className="mt-4 w-full py-3 rounded-lg border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-all flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -123,9 +131,9 @@ export default function SignUp() {
           </div>
           
           <p className="mt-6 text-center text-sm text-neutral-600 dark:text-neutral-400">
-            Already have an account?{" "}
-            <Link href="/auth/signin" className="text-indigo-500 hover:text-indigo-600 font-medium">
-              Sign in
+           Don&#39;t have an account?{" "}
+            <Link href="/auth/signup" className="text-indigo-500 hover:text-indigo-600 font-medium">
+              Sign up
             </Link>
           </p>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +9,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import SidebarComponent from "@/components/Sidebar";
 import { motion } from "framer-motion";
 import { Upload, BookmarkPlus , ClipboardCopy} from 'lucide-react';
+import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter } from "next/navigation";
 
 const GenerateCoverLetter = () => {
   const [jobDescription, setJobDescription] = useState("");
@@ -19,8 +21,16 @@ const GenerateCoverLetter = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [saveLoading, setSaveLoading] = useState(false);
+  const router = useRouter();
 
-  const handleGenerateCoverLetter = async () => {
+  const { isAuthenticated } = useAuth0()
+  useEffect(() => {
+    if(!isAuthenticated){
+      router.replace('/')
+    }
+  },[])
+
+  async function handleGenerateCoverLetter() {
     try {
       setError("");
       setLoading(true);
@@ -59,7 +69,7 @@ const GenerateCoverLetter = () => {
           method: "POST",
           body: formData,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
@@ -77,7 +87,7 @@ const GenerateCoverLetter = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, setFile: (file: File | null) => void) => {

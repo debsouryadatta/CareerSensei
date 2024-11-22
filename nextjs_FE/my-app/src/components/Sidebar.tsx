@@ -7,6 +7,8 @@ import { IconBrandTabler, IconSettings, IconUserBolt, IconArrowLeft } from '@tab
 import { Search, FileText, BarChart2 } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { Button } from './ui/button';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 const links = [
@@ -48,8 +50,16 @@ const SidebarComponent = () => {
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState(""); // State for the user's name
 
+  const { logout } = useAuth0();
+  const handleLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
+
   useEffect(() => {
-    
     const name = localStorage.getItem("name");
     setUserName(name || ""); 
   }, []);
@@ -66,7 +76,14 @@ const SidebarComponent = () => {
             {open ? <Logo /> : <LogoIcon />}
             <div className="mt-8 flex flex-col gap-2">
               {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
+                link.label === "Logout" ? (
+                  <div key={idx} onClick={handleLogout}>
+                    <SidebarLink key={idx} link={link} />
+                    {/* logout */}
+                  </div>
+                ) : (
+                  <SidebarLink key={idx} link={link} />
+                )
               ))}
             </div>
           </div>

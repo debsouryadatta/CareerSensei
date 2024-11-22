@@ -5,8 +5,19 @@ import { Navbar } from "@/components/Navbar";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/navigation";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth0()
+  useEffect(() => {
+    if(isAuthenticated){
+      router.replace('/dashboard');
+    }
+  },[])
+
   return (
     <>
       <BackgroundBeams>

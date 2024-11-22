@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -9,6 +9,8 @@ import { Upload } from "lucide-react";
 import SidebarComponent from "@/components/Sidebar";
 import { CheckCircle2 } from "lucide-react";
 import { marked } from "marked";
+import { useRouter } from "next/navigation";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ResumeScore = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -18,6 +20,14 @@ const ResumeScore = () => {
   const [error, setError] = useState("");
   const [componentScores, setComponentScores] = useState<Record<string, number> | null>(null);
   const [advice, setAdvice] = useState<string[]>([]);
+  const router = useRouter();
+
+  const { isAuthenticated } = useAuth0()
+  useEffect(() => {
+    if(!isAuthenticated){
+      router.replace('/')
+    }
+  },[])
 
   const handleFileUpload = (selectedFiles: File[]) => {
     const selectedFile = selectedFiles[0];

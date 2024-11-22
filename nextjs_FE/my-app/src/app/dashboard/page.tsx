@@ -17,6 +17,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [savedJobs, setSavedJobs] = useState([]);
@@ -24,6 +26,14 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expandedItems, setExpandedItems] = useState({});
+  const router = useRouter();
+
+  const { isAuthenticated } = useAuth0()
+  useEffect(() => {
+    if(!isAuthenticated){
+      router.replace('/')
+    }
+  },[])
 
   const userId = localStorage.getItem("user_id");
 

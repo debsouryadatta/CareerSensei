@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,6 +10,8 @@ import { MapPin, Building2, Clock, Coins, ExternalLink } from 'lucide-react';
 import { BookmarkPlus } from 'lucide-react';
 import SidebarComponent from '@/components/Sidebar';
 import { Upload } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 const JobSearch = () => {
@@ -19,6 +21,14 @@ const JobSearch = () => {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("resume");
+  const router = useRouter();
+
+  const { isAuthenticated } = useAuth0()
+  useEffect(() => {
+    if(!isAuthenticated){
+      router.replace('/')
+    }
+  },[])
 
 
 

@@ -4,8 +4,18 @@
 "use client";
 import Link from "next/link";
 import { SparklesCore } from "../components/ui/sparkles"; // Adjust the import path if necessary
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Navbar = () => {
+
+  const { loginWithRedirect } = useAuth0();
+  const handleGoogleSignIn = async () => {
+    await loginWithRedirect({
+      authorizationParams: {
+        prompt: "login",
+      },
+    });
+  }
   
   return (
     <nav className="fixed top-0 w-full z-50 px-4 py-3 backdrop-blur-sm">
@@ -30,16 +40,14 @@ export const Navbar = () => {
         
         <div className="flex items-center gap-4">
          
-          <Link href="/auth/signin">
+          {/* <Link href="/auth/signin">
             <button className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all">
               Sign In
             </button>
-          </Link>
-          <Link href="/auth/signup">
-            <button className="px-4 py-2 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-all">
-              Sign Up
+          </Link> */}
+            <button onClick={handleGoogleSignIn} className="px-4 py-2 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-all">
+              Sign In / Sign Up
             </button>
-          </Link>
         </div>
       </div>
     </nav>
