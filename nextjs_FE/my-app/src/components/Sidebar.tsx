@@ -53,7 +53,7 @@ const SidebarComponent = () => {
     <Sidebar 
       open={open} 
       setOpen={setOpen} 
-      className="w-full lg:w-64 lg:flex-shrink-0 d"
+      className="w-full lg:w-64 lg:flex-shrink-0 d "
     >
       <SidebarBody className="justify-between gap-10">
 

@@ -26,7 +26,7 @@ export default function page() {
   const registerUser = async (token: string, name: string, email: string, image: string) => {
     console.log("token", token, "name", name, "email", email, "image", image);
     
-    const response = await fetch("http://localhost:8000/api/v1/user/register", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

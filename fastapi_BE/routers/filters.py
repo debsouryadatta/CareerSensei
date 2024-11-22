@@ -1,6 +1,7 @@
 import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
+from auth.auth import validate_token
 from models.models import Filters
 from utils.filters_jobs import process_job_search
 
@@ -8,7 +9,8 @@ from utils.filters_jobs import process_job_search
 filter_router = APIRouter(
     prefix="/filters",
     tags=["filters"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
+    dependencies=[Depends(validate_token)]
 )
 
 @filter_router.post("/job_search")
