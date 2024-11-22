@@ -53,7 +53,7 @@ export default function page() {
         localStorage.setItem("accessToken", token);
         localStorage.setItem("user_id", response.user_data.id.toString() || "");
         localStorage.setItem("name", response.user_data.name);
-        router.replace("/jobsearch");
+        router.replace("/dashboard");
       } catch (error) {
         logout({
           logoutParams: {
