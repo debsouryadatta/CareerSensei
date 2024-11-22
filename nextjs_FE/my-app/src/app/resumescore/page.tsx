@@ -44,6 +44,7 @@ const ResumeScore = () => {
   };
   
 
+
   const handleAnalyzeResume = async () => {
     if (!file) {
       setError("Please upload a resume file.");
@@ -56,6 +57,11 @@ const ResumeScore = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("file_type", fileType || "");
+  
+    console.log("FormData content:");
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
   
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/resume/score`, {
@@ -72,15 +78,15 @@ const ResumeScore = () => {
       }
   
       const data = await response.json();
+      console.log("Received data:", data);
+  
       setScore(data.data.total_score || 0);
       setComponentScores(data.data.component_scores || {});
-  
-      // Split the improvement advice string into an array
-      const adviceArray =
+      setAdvice(
         typeof data.data.improvement_advice === "string"
           ? data.data.improvement_advice.split("\n").filter((tip) => tip.trim() !== "")
-          : [];
-      setAdvice(adviceArray);
+          : []
+      );
     } catch (err) {
       console.error(err);
       setError(err.message || "Failed to analyze resume.");
@@ -88,6 +94,7 @@ const ResumeScore = () => {
       setLoading(false);
     }
   };
+  
 
   const getScoreColor = (score) => {
     if (score >= 80) return "text-green-600";

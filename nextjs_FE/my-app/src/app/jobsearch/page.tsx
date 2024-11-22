@@ -52,6 +52,9 @@ const JobSearch = () => {
         {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+          },
         }
       );
 
@@ -126,6 +129,7 @@ const handleJobSearch = async (filterData = {}) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
       },
       body: JSON.stringify(filterData),
     });
@@ -167,6 +171,7 @@ const handleSaveJob = async (job) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(job),
     });
@@ -190,7 +195,7 @@ const handleSaveJob = async (job) => {
       job_title: '',
       required_experience: '',
       technologies: '',
-      work_type: 'Remote',
+      work_type: '',
       location: '',
       company: '',
       salary_range: ''
@@ -232,6 +237,20 @@ const handleSaveJob = async (job) => {
             placeholder="Company"
             value={filters.company}
             onChange={(e) => setFilters({...filters, company: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
+            
+          />
+           <Input 
+            placeholder="Work type"
+            value={filters.work_type}
+            onChange={(e) => setFilters({...filters, work_type: e.target.value})}
+             className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
+            
+          />
+           <Input 
+            placeholder="Salary"
+            value={filters.salary_range}
+            onChange={(e) => setFilters({...filters, salary_range: e.target.value})}
              className="rounded-lg shadow-sm p-3 border border-gray-500 focus:ring focus:ring-indigo-500"
             
           />

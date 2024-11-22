@@ -58,6 +58,9 @@ const GenerateCoverLetter = () => {
         {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+          },
         }
       );
 
@@ -108,6 +111,7 @@ const GenerateCoverLetter = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({
           cover_letter: coverLetter,
