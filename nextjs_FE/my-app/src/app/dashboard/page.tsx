@@ -186,23 +186,20 @@ const Dashboard = () => {
   };
 
   return (
-    // <div className="flex flex-col lg:flex-row h-screen bg-gray-100 dark:bg-neutral-900">
-    //   <SidebarComponent />
-    //   <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
-    //     <div className="max-w-4xl mx-auto">
 
-  <div className="flex h-screen bg-gray-100 dark:bg-neutral-900">
+  <div className="flex flex-col md:flex-row h-screen bg-gray-100 dark:bg-neutral-900">
   <SidebarComponent />
-  <div className="flex-1 flex flex-col overflow-hidden">
-    <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
+  <main className="w-full md:flex-1"> 
+    <div className="h-full p-4 lg:p-8 overflow-y-auto"> 
       <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100">Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100">Dashboard</h1>
+        
+        {error && (
+          <div className="p-4 mb-6 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded-lg">
+            {error}
+          </div>
+        )}
 
-          {error && (
-            <div className="p-4 mb-6 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded-lg">
-              {error}
-            </div>
-          )}
 
           {loading ? (
             <div className="space-y-4">
@@ -239,7 +236,7 @@ const Dashboard = () => {
           )}
         </div>
       </div>
-    </div>
+    </main>
     </div>
   );
 };

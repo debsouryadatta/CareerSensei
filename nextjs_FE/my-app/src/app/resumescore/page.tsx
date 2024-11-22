@@ -97,7 +97,7 @@ const ResumeScore = () => {
   
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col md:flex-row  h-screen">
       <SidebarComponent />
       <div className="flex-1 p-4 lg:p-8 bg-gray-100 dark:bg-neutral-900 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
